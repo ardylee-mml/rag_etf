@@ -1,0 +1,346 @@
+{
+  "collectionName": "players",
+  "description": "Contains player information including IDs, names, and other profile details.",
+  "documentCount": 304814,
+  "idType": "UUID",
+  "keyFields": [
+    "_id",
+    "playerId",
+    "name"
+  ],
+  "fields": [
+    {
+      "path": "_id",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Unique identifier for the player in MongoDB"
+    },
+    {
+      "path": "_id.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "playerId",
+      "types": [
+        "number",
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Business identifier for the player"
+    },
+    {
+      "path": "createdAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "language",
+      "types": [
+        "string"
+      ],
+      "frequency": 0.988,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "name",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Player's display name"
+    },
+    {
+      "path": "region",
+      "types": [
+        "string"
+      ],
+      "frequency": 0.988,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "updatedAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "discordConnectId",
+      "types": [
+        "string"
+      ],
+      "frequency": 0.032,
+      "isArray": false,
+      "description": null
+    }
+  ],
+  "outgoingRelationships": [],
+  "incomingRelationships": [
+    {
+      "sourceCollection": "events",
+      "sourceField": "playerId",
+      "targetField": "playerId",
+      "confidence": 0.02
+    },
+    {
+      "sourceCollection": "leaderboards",
+      "sourceField": "playerId",
+      "targetField": "playerId",
+      "confidence": 0.6
+    }
+  ],
+  "sampleDocuments": [
+    {
+      "_id": "ac6b39a8-91d1-4eea-8c76-c160e1995824",
+      "playerId": 902961137,
+      "__v": 0,
+      "createdAt": "2023-12-09T00:47:16.594Z",
+      "language": "en-us",
+      "name": "aaaaaaboiii",
+      "region": "CA",
+      "updatedAt": "2023-12-09T00:47:16.594Z"
+    },
+    {
+      "_id": "4eadf577-27fd-412f-8869-d0ee942e9bb5",
+      "playerId": 1142396048,
+      "__v": 0,
+      "createdAt": "2023-12-05T17:46:24.189Z",
+      "language": "en-us",
+      "name": "Franklin_Surten",
+      "region": "CZ",
+      "updatedAt": "2024-05-17T18:54:44.178Z"
+    },
+    {
+      "_id": "baa7cbaf-593c-4a48-885c-8a3e6be5ad53",
+      "playerId": 4257858378,
+      "__v": 0,
+      "createdAt": "2023-12-15T14:08:38.683Z",
+      "language": "es-es",
+      "name": "imbrchasing",
+      "region": "AR",
+      "updatedAt": "2024-10-28T19:41:34.342Z"
+    }
+  ],
+  "exampleQueries": [
+    {
+      "description": "Count total players",
+      "question": "How many players are there in total?",
+      "pipeline": [
+        {
+          "$count": "totalPlayers"
+        }
+      ]
+    },
+    {
+      "description": "Find players by name",
+      "question": "Find players with name containing 'Smith'",
+      "pipeline": [
+        {
+          "$match": {
+            "name": {
+              "$regex": "Smith",
+              "$options": "i"
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "playerId": 1,
+            "name": 1,
+            "email": 1
+          }
+        }
+      ]
+    },
+    {
+      "description": "Count total documents",
+      "question": "How many documents are in the players collection?",
+      "pipeline": [
+        {
+          "$count": "total"
+        }
+      ]
+    }
+  ]
+}

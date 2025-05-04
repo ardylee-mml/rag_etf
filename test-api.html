@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Test</h1>
+
+    <div>
+        <button id="checkStatus">Check API Status</button>
+        <button id="login">Login</button>
+        <button id="testQuery">Test Query</button>
+    </div>
+
+    <h2>Response:</h2>
+    <pre id="response">Click a button to test the API</pre>
+
+    <script>
+        const apiUrl = 'http://localhost:3000';
+        let token = null;
+
+        document.getElementById('checkStatus').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${apiUrl}/api/status`);
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        document.getElementById('login').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${apiUrl}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+
+                const data = await response.json();
+                token = data.token;
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        document.getElementById('testQuery').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${apiUrl}/api/query`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token ? `Bearer ${token}` : ''
+                    },
+                    body: JSON.stringify({
+                        query: 'Find events where type is zone and context.zoneId contains "S1-R1-LivRm"',
+                        collection: 'events'
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

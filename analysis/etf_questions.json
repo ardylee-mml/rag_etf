@@ -1,0 +1,93 @@
+[
+  {
+    "id": "4a96ff52-a277-4c88-89be-fda1f07acc16",
+    "text": "What do you think Amnesty International does to help for refugees?",
+    "correctChoiceId": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde",
+    "correctChoiceText": "Document rights abuses",
+    "notes": "They investigate and expose human rights violations in conflict zones"
+  },
+  {
+    "id": "0ce7f83b-f654-44cd-88ec-86704283581e",
+    "text": "How can technology help promote rights?",
+    "correctChoiceId": "a9180033-59ef-4c42-b9ef-b454a5e40245",
+    "correctChoiceText": "Social media",
+    "notes": "Raising awareness through social campaigns"
+  },
+  {
+    "id": "d5206421-bebc-483f-9c51-24853fc8076e",
+    "text": "What happens to many children in conflicts?",
+    "correctChoiceId": null,
+    "correctChoiceText": null,
+    "notes": null
+  },
+  {
+    "id": "ea16f43a-ab5a-4a92-8a9b-504bf910cff6",
+    "text": "What sites are protected in war by law?",
+    "correctChoiceId": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c",
+    "correctChoiceText": "Hospitals",
+    "notes": "Hospitals are protected under international humanitarian law"
+  },
+  {
+    "id": "5bc3e192-f828-4acb-aa5d-a736c46d8676",
+    "text": "How can people help war victims?",
+    "correctChoiceId": null,
+    "correctChoiceText": null,
+    "notes": null
+  },
+  {
+    "id": "61bf630f-fa8c-4aea-8605-065c5180346e",
+    "text": "What right is often denied in war?",
+    "correctChoiceId": "820b946c-c347-421f-b1fa-46f7e472f80e",
+    "correctChoiceText": "Fair trial",
+    "notes": "The right to due process is often violated during conflicts"
+  },
+  {
+    "id": "9ff17bd6-9c1b-462b-aaba-ddd75c557d51",
+    "text": "How do conflicts impact education?",
+    "correctChoiceId": null,
+    "correctChoiceText": null,
+    "notes": null
+  },
+  {
+    "id": "54a77d0c-a825-43e3-89ef-6933f541e114",
+    "text": "How can individuals support human rights?",
+    "correctChoiceId": null,
+    "correctChoiceText": null,
+    "notes": null
+  },
+  {
+    "id": "f9f6b8fb-ed43-4f23-b0d4-5cdb2e2f86e1",
+    "text": "What's the role of NGOs like Amnesty International in conflicts?",
+    "correctChoiceId": "185371d8-add8-4268-8069-d35e5c2bd0fb",
+    "correctChoiceText": "Monitoring abuses",
+    "notes": "NGOs document and report on rights violations"
+  },
+  {
+    "id": "af950993-6b14-4658-88c0-93a71febc2e4",
+    "text": "What's a big challenge for those fleeing conflicts?",
+    "correctChoiceId": "a0f33e48-6f2c-4440-b0bf-ba76cf6f53ce",
+    "correctChoiceText": "Getting visas",
+    "notes": "Refugees often lack proper documentation to flee safely"
+  },
+  {
+    "id": "34a8a1fe-e8fa-4a8b-8759-4bb388c0319e",
+    "text": "What right should civilians have in war?",
+    "correctChoiceId": "031ccae3-58f0-4f25-ab96-3ce1f2abe8e3",
+    "correctChoiceText": "To be safe",
+    "notes": "Civilians have a right under international law to protection from harm during conflicts"
+  },
+  {
+    "id": "0a23047c-3707-47cd-be40-579735fbd4ae",
+    "text": "What do landmines often threaten?",
+    "correctChoiceId": "66fbc891-6138-412e-92b3-a27f5178eac8",
+    "correctChoiceText": "Civilian safety",
+    "notes": "Landmines kill and injure many civilians each year"
+  },
+  {
+    "id": "81862a38-04b5-4579-a74e-14d0f5cd5131",
+    "text": "Why promote human rights globally?",
+    "correctChoiceId": "a28c50bf-f6f8-47cb-89e9-3bdf5bf4adb2",
+    "correctChoiceText": "Guarantee the dignity of all",
+    "notes": "Promoting human rights helps ensure the protection of human dignity"
+  }
+]

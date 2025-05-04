@@ -1,0 +1,148 @@
+{
+  "collectionName": "events",
+  "count": 10929576,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "playerId": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "applicationId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "type": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "time": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "context": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 1,
+      "percentPresent": 20
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "playerId",
+    "applicationId"
+  ],
+  "samples": [
+    {
+      "_id": "72253525-eef0-42e6-a17d-b79f99b26b48",
+      "playerId": "3570399196",
+      "applicationId": "bcf9c3e3-f600-44fd-b5ea-2980029437ba",
+      "type": "signin",
+      "time": "2023-10-27T15:11:12.439Z",
+      "__v": 0
+    },
+    {
+      "_id": "9db31edc-ac33-490f-a6d4-c30bb7e50189",
+      "playerId": "3339040049",
+      "applicationId": "66db6087-6e42-4932-bb1d-e8ea9b35cf49",
+      "type": "register",
+      "context": {
+        "name": "First Player Ever"
+      },
+      "time": "2023-08-05T03:17:21.168Z",
+      "__v": 0
+    },
+    {
+      "_id": "87278316-cc97-4add-81e5-333f3deb7e59",
+      "playerId": "3339040049",
+      "applicationId": "bcf9c3e3-f600-44fd-b5ea-2980029437ba",
+      "type": "register",
+      "time": "2023-03-08T09:42:47.966Z",
+      "__v": 0
+    },
+    {
+      "_id": "e1cd07e2-cc40-460b-949a-d277e136a4a6",
+      "playerId": "3570399196",
+      "applicationId": "bcf9c3e3-f600-44fd-b5ea-2980029437ba",
+      "type": "signout",
+      "time": "2023-10-27T05:12:33.043Z",
+      "__v": 0
+    },
+    {
+      "_id": "4a95dd84-7e9e-4c87-9b4f-fabbde7cb4d0",
+      "playerId": "3570399196",
+      "applicationId": "bcf9c3e3-f600-44fd-b5ea-2980029437ba",
+      "type": "signout",
+      "time": "2023-10-27T05:06:09.791Z",
+      "__v": 0
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all events",
+      "naturalLanguage": "Show me all events",
+      "mongoQuery": "db.events.find({})"
+    },
+    {
+      "description": "Find events by type",
+      "naturalLanguage": "Show me all question events",
+      "mongoQuery": "db.events.find({ type: \"question\" })"
+    },
+    {
+      "description": "Count events by type",
+      "naturalLanguage": "How many events are there of each type?",
+      "mongoQuery": "db.events.aggregate([\n  { $group: { _id: \"$type\", count: { $sum: 1 } } },\n  { $sort: { count: -1 } }\n])"
+    },
+    {
+      "description": "Find events by time range",
+      "naturalLanguage": "Show me events from January 2023",
+      "mongoQuery": "db.events.find({ time: { $gte: ISODate(\"2023-01-01\"), $lte: ISODate(\"2023-01-31\") } })"
+    }
+  ],
+  "eventTypes": [
+    "chat",
+    "gameover",
+    "item",
+    "question",
+    "register",
+    "signin",
+    "signout",
+    "zone"
+  ]
+}

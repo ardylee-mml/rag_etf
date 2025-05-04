@@ -1,0 +1,828 @@
+{
+  "collectionName": "questions",
+  "count": 56,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "userId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "text": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "choices": {
+      "types": [
+        "array"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "arrayElementType": "object",
+      "arrayElementFields": [
+        "text",
+        "_id"
+      ]
+    },
+    "createdAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "updatedAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "userId"
+  ],
+  "samples": [
+    {
+      "_id": "4a96ff52-a277-4c88-89be-fda1f07acc16",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What do you think Amnesty International does to help for refugees?",
+      "choices": [
+        {
+          "text": "Give refugees food",
+          "_id": "f2be7ce1-6f8e-4f07-b4f4-ed621ca5b7d3"
+        },
+        {
+          "text": "Document rights abuses",
+          "notes": "They investigate and expose human rights violations in conflict zones",
+          "_id": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde"
+        },
+        {
+          "text": "Negotiate peace deals",
+          "_id": "cd8afa0a-451c-41d7-8667-9be0d6fd76a1"
+        }
+      ],
+      "createdAt": "2023-11-07T06:44:14.925Z",
+      "updatedAt": "2023-11-07T06:44:14.925Z",
+      "__v": 0,
+      "_correctChoiceId": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde",
+      "_correctChoiceText": "Document rights abuses",
+      "_correctChoiceNotes": "They investigate and expose human rights violations in conflict zones"
+    },
+    {
+      "_id": "0ce7f83b-f654-44cd-88ec-86704283581e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "How can technology help promote rights?",
+      "choices": [
+        {
+          "text": "Encrypted messaging",
+          "_id": "6126d8eb-0c03-495c-b201-dd3fa1beeb91"
+        },
+        {
+          "text": "Satellite images",
+          "_id": "858cbdaf-afe2-4e4c-a489-8e8acd79c0c2"
+        },
+        {
+          "text": "Social media",
+          "notes": "Raising awareness through social campaigns",
+          "_id": "a9180033-59ef-4c42-b9ef-b454a5e40245"
+        }
+      ],
+      "createdAt": "2023-11-07T06:50:42.495Z",
+      "updatedAt": "2023-11-07T06:50:42.495Z",
+      "__v": 0,
+      "_correctChoiceId": "a9180033-59ef-4c42-b9ef-b454a5e40245",
+      "_correctChoiceText": "Social media",
+      "_correctChoiceNotes": "Raising awareness through social campaigns"
+    },
+    {
+      "_id": "d5206421-bebc-483f-9c51-24853fc8076e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What happens to many children in conflicts?",
+      "choices": [
+        {
+          "text": "Become refugees",
+          "_id": "0c94a0f0-40bf-46b4-8578-b7252985692e"
+        },
+        {
+          "text": "Lose family",
+          "_id": "96e748ba-e380-445b-9207-54c30746c45f"
+        },
+        {
+          "text": "Join armed groups",
+          "_id": "4584dc3c-76d2-498d-a8db-a138b402fcf3"
+        },
+        {
+          "text": "All are correct",
+          "_id": "df923b25-376f-4e82-91e6-9bbad6a61d51"
+        }
+      ],
+      "createdAt": "2023-11-07T06:49:19.231Z",
+      "updatedAt": "2023-11-07T06:49:19.231Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "54962910-a40e-41af-8d3c-7e8d29a83a03",
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749",
+      "text": "What matters most when buying a product?",
+      "choices": [
+        {
+          "text": "Price",
+          "_id": "efeb50ad-a68e-46c6-9e5d-a50c2befaea7"
+        },
+        {
+          "text": "Brand",
+          "_id": "f694ff43-6857-446b-bcc2-8fa68454ed29"
+        },
+        {
+          "text": "Sustainability",
+          "_id": "fdde5121-70ab-44c4-b3f8-b34bc5af3150"
+        },
+        {
+          "text": "Trendiness",
+          "_id": "4cb78905-c193-46d0-ab89-e3ff2d002bff"
+        }
+      ],
+      "createdAt": "2024-03-17T11:46:17.795Z",
+      "updatedAt": "2024-03-17T11:46:17.795Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "ea16f43a-ab5a-4a92-8a9b-504bf910cff6",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What sites are protected in war by law?",
+      "choices": [
+        {
+          "text": "Schools",
+          "_id": "81e9be39-efc9-48bd-be24-952d1dab28b8"
+        },
+        {
+          "text": "Places of worship",
+          "_id": "5f08c4c0-b692-46d6-a7bb-b996eadbd539"
+        },
+        {
+          "text": "Hospitals",
+          "notes": "Hospitals are protected under international humanitarian law",
+          "_id": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c"
+        }
+      ],
+      "createdAt": "2023-11-07T06:46:52.680Z",
+      "updatedAt": "2023-11-07T06:46:52.680Z",
+      "__v": 0,
+      "_correctChoiceId": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c",
+      "_correctChoiceText": "Hospitals",
+      "_correctChoiceNotes": "Hospitals are protected under international humanitarian law"
+    },
+    {
+      "_id": "8bb673bb-f83c-4902-871d-261b02f8bf17",
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749",
+      "text": "Which factor do you think influences most people your age when buying a product?",
+      "choices": [
+        {
+          "text": "Price",
+          "_id": "981bedd5-9993-4b9a-a3b6-071fcbe1aaab"
+        },
+        {
+          "text": "Brand",
+          "_id": "a520f5d2-664b-4a97-83e8-a8117c6bde0d"
+        },
+        {
+          "text": "Sustainability",
+          "_id": "5db87e35-76bd-496a-93e5-1033b6d73b78"
+        },
+        {
+          "text": "Trendiness",
+          "_id": "dd4b421c-ced7-4a12-ab45-37709020b06d"
+        }
+      ],
+      "createdAt": "2024-03-17T11:47:25.451Z",
+      "updatedAt": "2024-03-17T11:47:25.451Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "71f641de-e76c-49e9-bc25-c57b477aa3cc",
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749",
+      "text": "Do you think influencer marketing makes most people your age want to buy products?",
+      "choices": [
+        {
+          "text": "Always",
+          "_id": "a48c39a2-10b0-4906-ad56-946e793e4bff"
+        },
+        {
+          "text": "Sometimes",
+          "_id": "1ceedd01-74ee-4fec-82a6-73c493a3a152"
+        },
+        {
+          "text": "Rarely",
+          "_id": "03f6bece-8839-41d8-9363-b490883fbf69"
+        },
+        {
+          "text": "Never",
+          "_id": "169314c2-7faf-46d3-84d0-94ce4ceebba6"
+        }
+      ],
+      "createdAt": "2024-03-17T11:51:01.589Z",
+      "updatedAt": "2024-03-17T11:51:01.589Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "37c16af1-6ac6-486f-8fcb-e9a867027c6f",
+      "userId": "23a2d529-7dc4-47d3-a724-a0f2b6e6d3b2",
+      "text": "What is your favourite drink?",
+      "choices": [
+        {
+          "text": "Coffee",
+          "_id": "f2a54d0f-1ab3-47fc-9df4-b43e57d158e6"
+        },
+        {
+          "text": "Tea",
+          "_id": "05ad216d-78b8-49c0-9641-bd236ff30233"
+        }
+      ],
+      "createdAt": "2023-11-04T21:08:13.278Z",
+      "updatedAt": "2023-11-04T21:08:13.278Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "5bc3e192-f828-4acb-aa5d-a736c46d8676",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "How can people help war victims?",
+      "choices": [
+        {
+          "text": "Send care packages",
+          "_id": "d26c109e-745f-4dbb-a688-443e0656babb"
+        },
+        {
+          "text": "Protest wars",
+          "_id": "565f5aca-1a28-4eaf-8f09-7509a6599d7c"
+        },
+        {
+          "text": "Donate to local and international  NGOs like Amnesty International",
+          "_id": "9e5b5d17-0b7c-402c-962d-aa8af2b8150b"
+        },
+        {
+          "text": "All are correct",
+          "_id": "5a063eea-1cce-4078-9424-c5da5409cec0"
+        }
+      ],
+      "createdAt": "2023-11-07T06:48:35.016Z",
+      "updatedAt": "2023-11-07T06:48:35.016Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "7470bf47-3413-413d-8ced-c5b2d108149c",
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749",
+      "text": "How brand loyal are you?",
+      "choices": [
+        {
+          "text": "Never switch",
+          "_id": "8a418b10-046c-411f-8541-3a2bc37a6a1f"
+        },
+        {
+          "text": "Sometimes switch",
+          "_id": "77d076cb-f56b-48ce-8524-2015e7c235d0"
+        },
+        {
+          "text": "Always switch",
+          "_id": "41e2b808-79ab-4119-a02f-f339649da140"
+        },
+        {
+          "text": "No loyalty",
+          "_id": "5fc3fcc3-1b70-435b-9b93-e500eaacd9e5"
+        }
+      ],
+      "createdAt": "2024-03-17T11:56:43.651Z",
+      "updatedAt": "2024-03-17T11:56:43.651Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all questions",
+      "naturalLanguage": "Show me all questions",
+      "mongoQuery": "db.questions.find({})"
+    },
+    {
+      "description": "Find questions by text",
+      "naturalLanguage": "Find questions containing \"history\"",
+      "mongoQuery": "db.questions.find({ text: { $regex: \"history\", $options: \"i\" } })"
+    },
+    {
+      "description": "Count how many times each question has been answered",
+      "naturalLanguage": "How many times has each question been answered?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"question\" } },\n  { $group: { _id: \"$context.questionId\", count: { $sum: 1 } } },\n  { $lookup: { from: \"questions\", localField: \"_id\", foreignField: \"_id\", as: \"questionDetails\" } },\n  { $unwind: { path: \"$questionDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: { questionId: \"$_id\", questionText: \"$questionDetails.text\", count: 1, _id: 0 } },\n  { $sort: { count: -1 } }\n])"
+    },
+    {
+      "description": "Find questions with their correct answers",
+      "naturalLanguage": "Show me all questions with their correct answers",
+      "mongoQuery": "db.questions.aggregate([\n  { $match: {} },\n  { $project: {\n    questionId: \"$_id\",\n    questionText: \"$text\",\n    correctChoice: {\n      $filter: {\n        input: \"$choices\",\n        as: \"choice\",\n        cond: { $ifNull: [\"$$choice.notes\", false] }\n      }\n    },\n    userId: 1\n  }},\n  { $unwind: { path: \"$correctChoice\", preserveNullAndEmptyArrays: true } }\n])"
+    },
+    {
+      "description": "Count wrong first attempts per question",
+      "naturalLanguage": "How many players answered each question wrong on their first attempt?",
+      "mongoQuery": "// This requires custom logic in JavaScript to:\n// 1. Find the correct choice for each question\n// 2. Group events by player and question to identify first attempts\n// 3. Check if first attempts were wrong\n// 4. Count wrong first attempts by question"
+    }
+  ],
+  "correctAnswers": {
+    "4a96ff52-a277-4c88-89be-fda1f07acc16": {
+      "questionId": "4a96ff52-a277-4c88-89be-fda1f07acc16",
+      "questionText": "What do you think Amnesty International does to help for refugees?",
+      "correctChoiceId": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde",
+      "correctChoiceText": "Document rights abuses",
+      "correctChoiceNotes": "They investigate and expose human rights violations in conflict zones",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "0ce7f83b-f654-44cd-88ec-86704283581e": {
+      "questionId": "0ce7f83b-f654-44cd-88ec-86704283581e",
+      "questionText": "How can technology help promote rights?",
+      "correctChoiceId": "a9180033-59ef-4c42-b9ef-b454a5e40245",
+      "correctChoiceText": "Social media",
+      "correctChoiceNotes": "Raising awareness through social campaigns",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "d5206421-bebc-483f-9c51-24853fc8076e": {
+      "questionId": "d5206421-bebc-483f-9c51-24853fc8076e",
+      "questionText": "What happens to many children in conflicts?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "54962910-a40e-41af-8d3c-7e8d29a83a03": {
+      "questionId": "54962910-a40e-41af-8d3c-7e8d29a83a03",
+      "questionText": "What matters most when buying a product?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "ea16f43a-ab5a-4a92-8a9b-504bf910cff6": {
+      "questionId": "ea16f43a-ab5a-4a92-8a9b-504bf910cff6",
+      "questionText": "What sites are protected in war by law?",
+      "correctChoiceId": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c",
+      "correctChoiceText": "Hospitals",
+      "correctChoiceNotes": "Hospitals are protected under international humanitarian law",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "8bb673bb-f83c-4902-871d-261b02f8bf17": {
+      "questionId": "8bb673bb-f83c-4902-871d-261b02f8bf17",
+      "questionText": "Which factor do you think influences most people your age when buying a product?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "71f641de-e76c-49e9-bc25-c57b477aa3cc": {
+      "questionId": "71f641de-e76c-49e9-bc25-c57b477aa3cc",
+      "questionText": "Do you think influencer marketing makes most people your age want to buy products?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "37c16af1-6ac6-486f-8fcb-e9a867027c6f": {
+      "questionId": "37c16af1-6ac6-486f-8fcb-e9a867027c6f",
+      "questionText": "What is your favourite drink?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "23a2d529-7dc4-47d3-a724-a0f2b6e6d3b2"
+    },
+    "5bc3e192-f828-4acb-aa5d-a736c46d8676": {
+      "questionId": "5bc3e192-f828-4acb-aa5d-a736c46d8676",
+      "questionText": "How can people help war victims?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "7470bf47-3413-413d-8ced-c5b2d108149c": {
+      "questionId": "7470bf47-3413-413d-8ced-c5b2d108149c",
+      "questionText": "How brand loyal are you?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "c19d6648-f894-4397-85e9-216c2d4b4953": {
+      "questionId": "c19d6648-f894-4397-85e9-216c2d4b4953",
+      "questionText": "What do you think most people your age think about brand x celebrity collaborations?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "2ede72b7-6260-440a-b23c-d77f59f66639": {
+      "questionId": "2ede72b7-6260-440a-b23c-d77f59f66639",
+      "questionText": "What do you think most people your age think about subscription boxes?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "61bf630f-fa8c-4aea-8605-065c5180346e": {
+      "questionId": "61bf630f-fa8c-4aea-8605-065c5180346e",
+      "questionText": "What right is often denied in war?",
+      "correctChoiceId": "820b946c-c347-421f-b1fa-46f7e472f80e",
+      "correctChoiceText": "Fair trial",
+      "correctChoiceNotes": "The right to due process is often violated during conflicts",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "8936efdb-80d7-41ff-96e5-ad63cc2ab3d5": {
+      "questionId": "8936efdb-80d7-41ff-96e5-ad63cc2ab3d5",
+      "questionText": "What do you think most people your age think about personalized product recommendations?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "0011a8e4-6589-4cf1-946b-56b79a7c440e": {
+      "questionId": "0011a8e4-6589-4cf1-946b-56b79a7c440e",
+      "questionText": "In your opinion, how do most people your age feel about AI/IoT shopping experiences?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "886b2a52-01b5-4f8a-b190-17bd62edb2ea": {
+      "questionId": "886b2a52-01b5-4f8a-b190-17bd62edb2ea",
+      "questionText": "AI/IoT shopping experiences:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "d2435637-3ab5-482a-98a6-65564c017e96": {
+      "questionId": "d2435637-3ab5-482a-98a6-65564c017e96",
+      "questionText": "How do you think most people your age feel about brands taking social stands?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "ced627fc-ac29-404f-806b-6625f641a501": {
+      "questionId": "ced627fc-ac29-404f-806b-6625f641a501",
+      "questionText": "Best way for brands to reach you:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "447c4d3b-9731-491e-b9a0-7072c31b05df": {
+      "questionId": "447c4d3b-9731-491e-b9a0-7072c31b05df",
+      "questionText": "What do you think most people your age think about AR/VR brand experiences?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "c8825792-b47e-4052-ac53-ed1bb4a5a460": {
+      "questionId": "c8825792-b47e-4052-ac53-ed1bb4a5a460",
+      "questionText": "Loyalty programs are:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "9ff17bd6-9c1b-462b-aaba-ddd75c557d51": {
+      "questionId": "9ff17bd6-9c1b-462b-aaba-ddd75c557d51",
+      "questionText": "How do conflicts impact education?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "54a77d0c-a825-43e3-89ef-6933f541e114": {
+      "questionId": "54a77d0c-a825-43e3-89ef-6933f541e114",
+      "questionText": "How can individuals support human rights?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "f9f6b8fb-ed43-4f23-b0d4-5cdb2e2f86e1": {
+      "questionId": "f9f6b8fb-ed43-4f23-b0d4-5cdb2e2f86e1",
+      "questionText": "What's the role of NGOs like Amnesty International in conflicts?",
+      "correctChoiceId": "185371d8-add8-4268-8069-d35e5c2bd0fb",
+      "correctChoiceText": "Monitoring abuses",
+      "correctChoiceNotes": "NGOs document and report on rights violations",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "27c03b6b-ad14-45d8-8be9-633b7c6316b4": {
+      "questionId": "27c03b6b-ad14-45d8-8be9-633b7c6316b4",
+      "questionText": "In your opinion, how do most people your age discover new products?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "f401dfd8-7abe-43c8-a35f-180cd34049af": {
+      "questionId": "f401dfd8-7abe-43c8-a35f-180cd34049af",
+      "questionText": "Customer service must be:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "0a908ea0-cb84-4187-b645-5dcd44a5e777": {
+      "questionId": "0a908ea0-cb84-4187-b645-5dcd44a5e777",
+      "questionText": "In your opinion, what's the best way for brands to reach most people your age?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "a81a7da4-0597-4f78-9523-e0ab2bd59759": {
+      "questionId": "a81a7da4-0597-4f78-9523-e0ab2bd59759",
+      "questionText": "Renting products is:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "5be476a1-023d-4069-bd86-494d58b0df7b": {
+      "questionId": "5be476a1-023d-4069-bd86-494d58b0df7b",
+      "questionText": "What do you think most people your age think about renting products?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "c68f0a27-d919-45ab-a9af-0784f60b8424": {
+      "questionId": "c68f0a27-d919-45ab-a9af-0784f60b8424",
+      "questionText": "Personalized recommendations:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "6cc50b7e-b668-49f4-a631-a608641c7550": {
+      "questionId": "6cc50b7e-b668-49f4-a631-a608641c7550",
+      "questionText": "Which statement do you think most people your age would agree with about eco-friendly brands?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "408ff8b1-4747-4bdd-b92a-8e43165d41da": {
+      "questionId": "408ff8b1-4747-4bdd-b92a-8e43165d41da",
+      "questionText": "What is your favourite meal?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "23a2d529-7dc4-47d3-a724-a0f2b6e6d3b2"
+    },
+    "af950993-6b14-4658-88c0-93a71febc2e4": {
+      "questionId": "af950993-6b14-4658-88c0-93a71febc2e4",
+      "questionText": "What's a big challenge for those fleeing conflicts?",
+      "correctChoiceId": "a0f33e48-6f2c-4440-b0bf-ba76cf6f53ce",
+      "correctChoiceText": "Getting visas",
+      "correctChoiceNotes": "Refugees often lack proper documentation to flee safely",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "34a8a1fe-e8fa-4a8b-8759-4bb388c0319e": {
+      "questionId": "34a8a1fe-e8fa-4a8b-8759-4bb388c0319e",
+      "questionText": "What right should civilians have in war?",
+      "correctChoiceId": "031ccae3-58f0-4f25-ab96-3ce1f2abe8e3",
+      "correctChoiceText": "To be safe",
+      "correctChoiceNotes": "Civilians have a right under international law to protection from harm during conflicts",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "91d408eb-5df7-421c-9632-dc4917c33051": {
+      "questionId": "91d408eb-5df7-421c-9632-dc4917c33051",
+      "questionText": "How do you discover new products?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "89d81e26-9045-498e-89ea-2921eb8490c0": {
+      "questionId": "89d81e26-9045-498e-89ea-2921eb8490c0",
+      "questionText": "The ideal packaging should be:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "69ce1e9d-f43e-4d0b-9441-cd0d1999e17c": {
+      "questionId": "69ce1e9d-f43e-4d0b-9441-cd0d1999e17c",
+      "questionText": "How brand loyal do you think most people your age are?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "65ee1511-f3a5-4ed0-bf82-1fb7089430f1": {
+      "questionId": "65ee1511-f3a5-4ed0-bf82-1fb7089430f1",
+      "questionText": "What do you think most people your age expect from customer service?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "a6046317-cffa-4f02-865d-5de881551ac0": {
+      "questionId": "a6046317-cffa-4f02-865d-5de881551ac0",
+      "questionText": "How important do you think health/wellness products are for most people your age?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "0a23047c-3707-47cd-be40-579735fbd4ae": {
+      "questionId": "0a23047c-3707-47cd-be40-579735fbd4ae",
+      "questionText": "What do landmines often threaten?",
+      "correctChoiceId": "66fbc891-6138-412e-92b3-a27f5178eac8",
+      "correctChoiceText": "Civilian safety",
+      "correctChoiceNotes": "Landmines kill and injure many civilians each year",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "1ca40a4d-100f-431d-a88e-81fe152eb2bc": {
+      "questionId": "1ca40a4d-100f-431d-a88e-81fe152eb2bc",
+      "questionText": "Your preferred shopping mode:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "f30f3bc9-d325-46e5-93d3-7496c9e288ea": {
+      "questionId": "f30f3bc9-d325-46e5-93d3-7496c9e288ea",
+      "questionText": "Which statement do you think most people your age would agree with about customized products?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "5be56256-df01-4559-84bb-266edb6178a0": {
+      "questionId": "5be56256-df01-4559-84bb-266edb6178a0",
+      "questionText": "What kind of packaging do you think most people your age would prefer?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "d2e8a394-a43b-427f-8043-ffe0f220d8e5": {
+      "questionId": "d2e8a394-a43b-427f-8043-ffe0f220d8e5",
+      "questionText": "Subscription boxes are:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "bac16f8d-0809-467a-9e92-627fdbcccd8c": {
+      "questionId": "bac16f8d-0809-467a-9e92-627fdbcccd8c",
+      "questionText": "AR/VR brand experiences are:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "25d714fa-127a-45c3-9dd0-1595c58a34b0": {
+      "questionId": "25d714fa-127a-45c3-9dd0-1595c58a34b0",
+      "questionText": "Product transparency matters:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "a791c298-4a60-4f90-a530-ae8f9055711e": {
+      "questionId": "a791c298-4a60-4f90-a530-ae8f9055711e",
+      "questionText": "Customized products are:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "0bff9e80-a935-469b-8384-12e88c3ae0cf": {
+      "questionId": "0bff9e80-a935-469b-8384-12e88c3ae0cf",
+      "questionText": "Influencer marketing makes you want to buy:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "7e56c910-60d8-42a6-b94e-2214962170c7": {
+      "questionId": "7e56c910-60d8-42a6-b94e-2214962170c7",
+      "questionText": "In your opinion, how do most people your age prefer to shop?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "2b9808b6-70ec-4b76-8f33-c45a30ea5445": {
+      "questionId": "2b9808b6-70ec-4b76-8f33-c45a30ea5445",
+      "questionText": "Which statement do you think most people your age would agree with about customized products?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "e4460b1f-1ae4-4f42-82a2-519e48f55728": {
+      "questionId": "e4460b1f-1ae4-4f42-82a2-519e48f55728",
+      "questionText": "Brand x Celebrity collab is:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "e4168399-aba9-4dc2-be95-03fd4acbb64e": {
+      "questionId": "e4168399-aba9-4dc2-be95-03fd4acbb64e",
+      "questionText": "Eco-friendly brands are:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "ecca6413-b2ee-42c4-926b-f80f15b3d58c": {
+      "questionId": "ecca6413-b2ee-42c4-926b-f80f15b3d58c",
+      "questionText": "Brands taking social stands:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "87190061-d691-466c-b0c1-5f73f19f30c3": {
+      "questionId": "87190061-d691-466c-b0c1-5f73f19f30c3",
+      "questionText": "Health/wellness products are:",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "0881469f-390e-4ffb-8883-5829f3e9a675": {
+      "questionId": "0881469f-390e-4ffb-8883-5829f3e9a675",
+      "questionText": "How do you think most people your age feel about loyalty programs?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "d65a6f1d-7a05-4b01-a717-3ef6beb759ad": {
+      "questionId": "d65a6f1d-7a05-4b01-a717-3ef6beb759ad",
+      "questionText": "How important do you think product transparency is for most people your age?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "c6fa6b5e-7543-4e86-b667-4ea145c88749"
+    },
+    "81862a38-04b5-4579-a74e-14d0f5cd5131": {
+      "questionId": "81862a38-04b5-4579-a74e-14d0f5cd5131",
+      "questionText": "Why promote human rights globally?",
+      "correctChoiceId": "a28c50bf-f6f8-47cb-89e9-3bdf5bf4adb2",
+      "correctChoiceText": "Guarantee the dignity of all",
+      "correctChoiceNotes": "Promoting human rights helps ensure the protection of human dignity",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    }
+  }
+}

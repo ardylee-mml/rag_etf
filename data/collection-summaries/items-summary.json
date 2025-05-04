@@ -1,0 +1,680 @@
+{
+  "collectionName": "items",
+  "description": "Contains information about game items that players can interact with.",
+  "documentCount": 100,
+  "idType": "UUID",
+  "keyFields": [
+    "_id",
+    "name"
+  ],
+  "fields": [
+    {
+      "path": "_id",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "name",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "description",
+      "types": [
+        "string"
+      ],
+      "frequency": 0.92,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "tags",
+      "types": [
+        "Array",
+        "Array<string>"
+      ],
+      "frequency": 1,
+      "isArray": true,
+      "description": null
+    },
+    {
+      "path": "createdAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "updatedAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    }
+  ],
+  "outgoingRelationships": [],
+  "incomingRelationships": [],
+  "sampleDocuments": [
+    {
+      "_id": "467f7a33-8794-494e-8507-0b1942262a41",
+      "userId": "23a2d529-7dc4-47d3-a724-a0f2b6e6d3b2",
+      "applicationId": "7f061922-b09f-437b-b4c5-b0b681f6461b",
+      "name": "1st item",
+      "description": "the 1st item description",
+      "tags": [
+        "health",
+        "hunger"
+      ],
+      "createdAt": "2023-10-31T21:21:45.779Z",
+      "updatedAt": "2023-10-31T21:21:45.779Z",
+      "__v": 0
+    },
+    {
+      "_id": "0da6af7f-73cf-483b-a9d4-fa988510af9a",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "Jumping Boots",
+      "description": "Golden boots - In-game purchase",
+      "tags": [],
+      "createdAt": "2023-10-31T22:02:42.609Z",
+      "updatedAt": "2023-10-31T22:02:42.609Z",
+      "__v": 0
+    },
+    {
+      "_id": "735c3f4b-2966-401d-99b0-c1ce706e001e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "Water",
+      "description": "Regular water to reduce hunger",
+      "tags": [],
+      "createdAt": "2023-10-31T22:02:34.971Z",
+      "updatedAt": "2023-10-31T22:02:34.971Z",
+      "__v": 0
+    }
+  ],
+  "exampleQueries": [
+    {
+      "description": "Find most interacted items",
+      "question": "Which items have been interacted with the most?",
+      "pipeline": [
+        {
+          "$lookup": {
+            "from": "events",
+            "localField": "_id",
+            "foreignField": "context.itemId",
+            "as": "interactions"
+          }
+        },
+        {
+          "$project": {
+            "_id": 1,
+            "name": 1,
+            "interactionCount": {
+              "$size": "$interactions"
+            }
+          }
+        },
+        {
+          "$sort": {
+            "interactionCount": -1
+          }
+        },
+        {
+          "$limit": 10
+        }
+      ]
+    },
+    {
+      "description": "Count total documents",
+      "question": "How many documents are in the items collection?",
+      "pipeline": [
+        {
+          "$count": "total"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,451 @@
+{
+  "collectionName": "events",
+  "description": "Contains player activity events such as logins, question answers, item interactions, and zone visits.",
+  "documentCount": 10929576,
+  "idType": "UUID",
+  "keyFields": [
+    "_id",
+    "playerId",
+    "type",
+    "time"
+  ],
+  "fields": [
+    {
+      "path": "_id",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Unique identifier for the event"
+    },
+    {
+      "path": "playerId",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "ID of the player who triggered the event"
+    },
+    {
+      "path": "type",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Type of event (signin, signout, question, item, zone)"
+    },
+    {
+      "path": "time",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Timestamp when the event occurred"
+    }
+  ],
+  "outgoingRelationships": [
+    {
+      "sourceField": "playerId",
+      "targetCollection": "players",
+      "targetField": "playerId",
+      "matchCount": 1,
+      "confidence": 0.02
+    }
+  ],
+  "incomingRelationships": [],
+  "sampleDocuments": [
+    {
+      "_id": "72253525-eef0-42e6-a17d-b79f99b26b48",
+      "playerId": "3570399196",
+      "applicationId": "bcf9c3e3-f600-44fd-b5ea-2980029437ba",
+      "type": "signin",
+      "time": "2023-10-27T15:11:12.439Z",
+      "__v": 0
+    },
+    {
+      "_id": "9db31edc-ac33-490f-a6d4-c30bb7e50189",
+      "playerId": "3339040049",
+      "applicationId": "66db6087-6e42-4932-bb1d-e8ea9b35cf49",
+      "type": "register",
+      "context": {
+        "name": "First Player Ever"
+      },
+      "time": "2023-08-05T03:17:21.168Z",
+      "__v": 0
+    },
+    {
+      "_id": "87278316-cc97-4add-81e5-333f3deb7e59",
+      "playerId": "3339040049",
+      "applicationId": "bcf9c3e3-f600-44fd-b5ea-2980029437ba",
+      "type": "signout",
+      "time": "2023-03-08T10:42:47.966Z",
+      "__v": 0
+    }
+  ],
+  "exampleQueries": [
+    {
+      "description": "Count events by type",
+      "question": "How many events are there of each type?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": "$type",
+            "count": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        }
+      ]
+    },
+    {
+      "description": "Find players with most activity",
+      "question": "Which players have the most events?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": "$playerId",
+            "count": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        },
+        {
+          "$limit": 10
+        },
+        {
+          "$lookup": {
+            "from": "players",
+            "localField": "_id",
+            "foreignField": "playerId",
+            "as": "playerDetails"
+          }
+        },
+        {
+          "$unwind": {
+            "path": "$playerDetails",
+            "preserveNullAndEmptyArrays": true
+          }
+        },
+        {
+          "$project": {
+            "playerId": "$_id",
+            "playerName": "$playerDetails.name",
+            "eventCount": "$count",
+            "_id": 0
+          }
+        }
+      ]
+    },
+    {
+      "description": "Count players who played more than X times",
+      "question": "How many players played more than 5 times?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": "$playerId",
+            "count": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$match": {
+            "count": {
+              "$gt": 5
+            }
+          }
+        },
+        {
+          "$count": "totalPlayers"
+        }
+      ]
+    },
+    {
+      "description": "Most answered questions",
+      "question": "What are the most answered questions?",
+      "pipeline": [
+        {
+          "$match": {
+            "type": "question"
+          }
+        },
+        {
+          "$group": {
+            "_id": "$context.questionId",
+            "count": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        },
+        {
+          "$limit": 10
+        },
+        {
+          "$lookup": {
+            "from": "questions",
+            "localField": "_id",
+            "foreignField": "_id",
+            "as": "questionDetails"
+          }
+        },
+        {
+          "$unwind": {
+            "path": "$questionDetails",
+            "preserveNullAndEmptyArrays": true
+          }
+        },
+        {
+          "$project": {
+            "questionId": "$_id",
+            "questionText": "$questionDetails.text",
+            "count": 1,
+            "_id": 0
+          }
+        }
+      ]
+    },
+    {
+      "description": "Average play time for players",
+      "question": "What is the average play time for players?",
+      "pipeline": [
+        {
+          "$match": {
+            "type": {
+              "$in": ["signin", "signout"]
+            }
+          }
+        },
+        {
+          "$sort": {
+            "playerId": 1,
+            "time": 1
+          }
+        },
+        {
+          "$group": {
+            "_id": "$playerId",
+            "events": {
+              "$push": {
+                "type": "$type",
+                "time": "$time"
+              }
+            }
+          }
+        },
+        {
+          "$addFields": {
+            "sessionTimes": {
+              "$reduce": {
+                "input": {
+                  "$range": [
+                    0,
+                    {
+                      "$subtract": [
+                        {
+                          "$size": "$events"
+                        },
+                        1
+                      ]
+                    }
+                  ]
+                },
+                "initialValue": [],
+                "in": {
+                  "$concatArrays": [
+                    "$$value",
+                    {
+                      "$cond": {
+                        "if": {
+                          "$and": [
+                            {
+                              "$eq": [
+                                {
+                                  "$arrayElemAt": [
+                                    "$events.type",
+                                    "$$this"
+                                  ]
+                                },
+                                "signin"
+                              ]
+                            },
+                            {
+                              "$eq": [
+                                {
+                                  "$arrayElemAt": [
+                                    "$events.type",
+                                    {
+                                      "$add": [
+                                        "$$this",
+                                        1
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "signout"
+                              ]
+                            }
+                          ]
+                        },
+                        "then": [
+                          {
+                            "$subtract": [
+                              {
+                                "$arrayElemAt": [
+                                  "$events.time",
+                                  {
+                                    "$add": [
+                                      "$$this",
+                                      1
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "$arrayElemAt": [
+                                  "$events.time",
+                                  "$$this"
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "else": []
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "$addFields": {
+            "totalPlayTime": {
+              "$sum": "$sessionTimes"
+            },
+            "sessionCount": {
+              "$size": "$sessionTimes"
+            },
+            "averageSessionTime": {
+              "$cond": {
+                "if": {
+                  "$gt": [
+                    {
+                      "$size": "$sessionTimes"
+                    },
+                    0
+                  ]
+                },
+                "then": {
+                  "$divide": [
+                    {
+                      "$sum": "$sessionTimes"
+                    },
+                    {
+                      "$size": "$sessionTimes"
+                    }
+                  ]
+                },
+                "else": 0
+              }
+            }
+          }
+        },
+        {
+          "$match": {
+            "sessionCount": {
+              "$gt": 0
+            }
+          }
+        },
+        {
+          "$group": {
+            "_id": null,
+            "averagePlayTime": {
+              "$avg": "$averageSessionTime"
+            },
+            "totalPlayers": {
+              "$sum": 1
+            },
+            "minPlayTime": {
+              "$min": "$averageSessionTime"
+            },
+            "maxPlayTime": {
+              "$max": "$averageSessionTime"
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "averagePlayTime": {
+              "$round": [
+                {
+                  "$divide": [
+                    "$averagePlayTime",
+                    1000
+                  ]
+                },
+                2
+              ]
+            },
+            "totalPlayers": 1,
+            "minPlayTime": {
+              "$round": [
+                {
+                  "$divide": [
+                    "$minPlayTime",
+                    1000
+                  ]
+                },
+                2
+              ]
+            },
+            "maxPlayTime": {
+              "$round": [
+                {
+                  "$divide": [
+                    "$maxPlayTime",
+                    1000
+                  ]
+                },
+                2
+              ]
+            },
+            "unit": {
+              "$literal": "seconds"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Count total documents",
+      "question": "How many documents are in the events collection?",
+      "pipeline": [
+        {
+          "$count": "total"
+        }
+      ]
+    }
+  ]
+}

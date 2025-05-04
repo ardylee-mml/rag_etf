@@ -1,0 +1,599 @@
+{
+  "collectionName": "questions",
+  "description": "Contains questions that players can answer, including choices and correct answers.",
+  "documentCount": 56,
+  "idType": "UUID",
+  "keyFields": [
+    "_id",
+    "text",
+    "choices"
+  ],
+  "fields": [
+    {
+      "path": "_id",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Unique identifier for the question"
+    },
+    {
+      "path": "_id.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "ID of the user who created the question"
+    },
+    {
+      "path": "userId.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "text",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "The question text"
+    },
+    {
+      "path": "choices",
+      "types": [
+        "Array"
+      ],
+      "frequency": 1,
+      "isArray": true,
+      "description": "Array of possible answer choices"
+    },
+    {
+      "path": "createdAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "updatedAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "deletedAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 0.017857142857142856,
+      "isArray": false,
+      "description": null
+    }
+  ],
+  "outgoingRelationships": [],
+  "incomingRelationships": [],
+  "sampleDocuments": [
+    {
+      "_id": "4a96ff52-a277-4c88-89be-fda1f07acc16",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What do you think Amnesty International does to help for refugees?",
+      "choices": [
+        {
+          "text": "Give refugees food",
+          "_id": "f2be7ce1-6f8e-4f07-b4f4-ed621ca5b7d3"
+        },
+        {
+          "text": "Document rights abuses",
+          "notes": "They investigate and expose human rights violations in conflict zones",
+          "_id": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde"
+        },
+        {
+          "text": "Negotiate peace deals",
+          "_id": "cd8afa0a-451c-41d7-8667-9be0d6fd76a1"
+        }
+      ],
+      "createdAt": "2023-11-07T06:44:14.925Z",
+      "updatedAt": "2023-11-07T06:44:14.925Z",
+      "__v": 0
+    },
+    {
+      "_id": "0ce7f83b-f654-44cd-88ec-86704283581e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "How can technology help promote rights?",
+      "choices": [
+        {
+          "text": "Encrypted messaging",
+          "_id": "6126d8eb-0c03-495c-b201-dd3fa1beeb91"
+        },
+        {
+          "text": "Satellite images",
+          "_id": "858cbdaf-afe2-4e4c-a489-8e8acd79c0c2"
+        },
+        {
+          "text": "Social media",
+          "notes": "Raising awareness through social campaigns",
+          "_id": "a9180033-59ef-4c42-b9ef-b454a5e40245"
+        }
+      ],
+      "createdAt": "2023-11-07T06:50:42.495Z",
+      "updatedAt": "2023-11-07T06:50:42.495Z",
+      "__v": 0
+    },
+    {
+      "_id": "d5206421-bebc-483f-9c51-24853fc8076e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What happens to many children in conflicts?",
+      "choices": [
+        {
+          "text": "Become refugees",
+          "_id": "0c94a0f0-40bf-46b4-8578-b7252985692e"
+        },
+        {
+          "text": "Lose family",
+          "_id": "96e748ba-e380-445b-9207-54c30746c45f"
+        },
+        {
+          "text": "Join armed groups",
+          "_id": "4584dc3c-76d2-498d-a8db-a138b402fcf3"
+        },
+        {
+          "text": "All are correct",
+          "_id": "df923b25-376f-4e82-91e6-9bbad6a61d51"
+        }
+      ],
+      "createdAt": "2023-11-07T06:49:19.231Z",
+      "updatedAt": "2023-11-07T06:49:19.231Z",
+      "__v": 0
+    }
+  ],
+  "exampleQueries": [
+    {
+      "description": "Count questions by difficulty",
+      "question": "How many questions are there of each difficulty level?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": "$difficulty",
+            "count": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        }
+      ]
+    },
+    {
+      "description": "Find questions with most wrong answers",
+      "question": "Which questions have the most wrong answers?",
+      "pipeline": [
+        {
+          "$lookup": {
+            "from": "events",
+            "let": {
+              "questionId": "$_id"
+            },
+            "pipeline": [
+              {
+                "$match": {
+                  "$expr": {
+                    "$and": [
+                      {
+                        "$eq": [
+                          "$type",
+                          "question"
+                        ]
+                      },
+                      {
+                        "$eq": [
+                          "$context.questionId",
+                          "$$questionId"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$lookup": {
+                  "from": "questions",
+                  "localField": "context.questionId",
+                  "foreignField": "_id",
+                  "as": "questionData"
+                }
+              },
+              {
+                "$unwind": "$questionData"
+              },
+              {
+                "$match": {
+                  "$expr": {
+                    "$ne": [
+                      "$context.choiceId",
+                      {}
+                    ]
+                  }
+                }
+              }
+            ],
+            "as": "wrongAnswers"
+          }
+        },
+        {
+          "$project": {
+            "_id": 1,
+            "text": 1,
+            "wrongAnswerCount": {
+              "$size": "$wrongAnswers"
+            }
+          }
+        },
+        {
+          "$sort": {
+            "wrongAnswerCount": -1
+          }
+        },
+        {
+          "$limit": 10
+        }
+      ]
+    },
+    {
+      "description": "Count total documents",
+      "question": "How many documents are in the questions collection?",
+      "pipeline": [
+        {
+          "$count": "total"
+        }
+      ]
+    }
+  ]
+}

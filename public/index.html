@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB RAG API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>MongoDB RAG API Test</h1>
+    
+    <div class="card">
+        <h2>Health Check</h2>
+        <button onclick="checkHealth()">Check Health</button>
+        <pre id="healthResult"></pre>
+    </div>
+
+    <div class="card">
+        <h2>Authentication</h2>
+        <button onclick="login()">Login</button>
+        <button onclick="register()">Register</button>
+        <pre id="authResult"></pre>
+    </div>
+
+    <div class="card">
+        <h2>Protected Data</h2>
+        <button onclick="getProtectedData()">Get Protected Data</button>
+        <pre id="dataResult"></pre>
+    </div>
+
+    <script>
+        let authToken = '';
+
+        async function checkHealth() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                document.getElementById('healthResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('healthResult').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function login() {
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+                const data = await response.json();
+                if (data.token) {
+                    authToken = data.token;
+                }
+                document.getElementById('authResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('authResult').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function register() {
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'test',
+                        password: 'test'
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('authResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('authResult').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function getProtectedData() {
+            try {
+                if (!authToken) {
+                    throw new Error('Please login first to get a token');
+                }
+                const response = await fetch('/api/data/protected', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('dataResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('dataResult').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html> 

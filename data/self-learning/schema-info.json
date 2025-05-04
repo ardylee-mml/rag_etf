@@ -1,0 +1,52 @@
+{
+  "players": {
+    "fields": {
+      "_id": { "type": "ObjectId", "description": "Player ID" },
+      "name": { "type": "String", "description": "Player name" },
+      "email": { "type": "String", "description": "Player email" },
+      "createdAt": { "type": "Date", "description": "Player creation date" }
+    },
+    "sampleSize": 100,
+    "totalDocuments": 1000
+  },
+  "events": {
+    "fields": {
+      "_id": { "type": "ObjectId", "description": "Event ID" },
+      "playerId": { "type": "ObjectId", "description": "Player ID" },
+      "type": { "type": "String", "description": "Event type" },
+      "timestamp": { "type": "Date", "description": "Event timestamp" },
+      "context": { "type": "Object", "description": "Event context" }
+    },
+    "sampleSize": 100,
+    "totalDocuments": 10000
+  },
+  "questions": {
+    "fields": {
+      "_id": { "type": "String", "description": "Question ID" },
+      "text": { "type": "String", "description": "Question text" },
+      "choices": { "type": "Array", "description": "Question choices" },
+      "difficulty": { "type": "Number", "description": "Question difficulty" }
+    },
+    "sampleSize": 50,
+    "totalDocuments": 200
+  },
+  "zones": {
+    "fields": {
+      "_id": { "type": "ObjectId", "description": "Zone ID" },
+      "name": { "type": "String", "description": "Zone name" },
+      "description": { "type": "String", "description": "Zone description" }
+    },
+    "sampleSize": 20,
+    "totalDocuments": 50
+  },
+  "items": {
+    "fields": {
+      "_id": { "type": "ObjectId", "description": "Item ID" },
+      "name": { "type": "String", "description": "Item name" },
+      "description": { "type": "String", "description": "Item description" },
+      "type": { "type": "String", "description": "Item type" }
+    },
+    "sampleSize": 30,
+    "totalDocuments": 100
+  }
+}

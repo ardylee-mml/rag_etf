@@ -1,0 +1,58 @@
+{
+  "collections": [
+    {
+      "name": "events",
+      "description": "Contains player activity events such as logins, question answers, item interactions, and zone visits.",
+      "documentCount": 10929576
+    },
+    {
+      "name": "players",
+      "description": "Contains player information including IDs, names, and other profile details.",
+      "documentCount": 304814
+    },
+    {
+      "name": "items",
+      "description": "Contains information about game items that players can interact with.",
+      "documentCount": 100
+    },
+    {
+      "name": "zones",
+      "description": "Contains information about game zones or areas that players can visit.",
+      "documentCount": 65
+    },
+    {
+      "name": "questions",
+      "description": "Contains questions that players can answer, including choices and correct answers.",
+      "documentCount": 56
+    },
+    {
+      "name": "leaderboards",
+      "description": "Contains player scores, levels, and rankings.",
+      "documentCount": 141349
+    }
+  ],
+  "relationships": {
+    "events": [
+      {
+        "sourceField": "playerId",
+        "targetCollection": "players",
+        "targetField": "playerId",
+        "matchCount": 1,
+        "confidence": 0.02
+      }
+    ],
+    "players": [],
+    "items": [],
+    "zones": [],
+    "questions": [],
+    "leaderboards": [
+      {
+        "sourceField": "playerId",
+        "targetCollection": "players",
+        "targetField": "playerId",
+        "matchCount": 30,
+        "confidence": 0.6
+      }
+    ]
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "collections": {
+    "items": {
+      "count": 100,
+      "fields": [
+        "_id",
+        "userId",
+        "applicationId",
+        "name",
+        "description",
+        "tags",
+        "createdAt",
+        "updatedAt",
+        "__v"
+      ],
+      "relationshipFields": [
+        "_id",
+        "userId",
+        "applicationId"
+      ]
+    },
+    "players": {
+      "count": 304814,
+      "fields": [
+        "_id",
+        "playerId",
+        "__v",
+        "createdAt",
+        "language",
+        "name",
+        "region",
+        "updatedAt",
+        "discordConnectId"
+      ],
+      "relationshipFields": [
+        "_id",
+        "playerId",
+        "discordConnectId"
+      ]
+    },
+    "questions": {
+      "count": 56,
+      "fields": [
+        "_id",
+        "userId",
+        "text",
+        "choices",
+        "createdAt",
+        "updatedAt",
+        "__v"
+      ],
+      "relationshipFields": [
+        "_id",
+        "userId"
+      ]
+    },
+    "zones": {
+      "count": 65,
+      "fields": [
+        "_id",
+        "userId",
+        "applicationId",
+        "name",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "__v"
+      ],
+      "relationshipFields": [
+        "_id",
+        "userId",
+        "applicationId"
+      ]
+    },
+    "leaderboards": {
+      "count": 141349,
+      "fields": [
+        "_id",
+        "applicationId",
+        "name",
+        "playerId",
+        "__v",
+        "amount",
+        "createdAt",
+        "updatedAt"
+      ],
+      "relationshipFields": [
+        "_id",
+        "applicationId",
+        "playerId"
+      ]
+    },
+    "events": {
+      "count": 10929576,
+      "fields": [
+        "_id",
+        "playerId",
+        "applicationId",
+        "type",
+        "time",
+        "__v",
+        "context"
+      ],
+      "relationshipFields": [
+        "_id",
+        "playerId",
+        "applicationId"
+      ],
+      "eventTypes": [
+        "chat",
+        "gameover",
+        "item",
+        "question",
+        "register",
+        "signin",
+        "signout",
+        "zone"
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "from": "events",
+      "fromField": "playerId",
+      "to": "players",
+      "toField": "playerId",
+      "type": "many-to-one"
+    },
+    {
+      "from": "events",
+      "fromField": "context.itemId",
+      "to": "items",
+      "toField": "_id",
+      "type": "many-to-one"
+    },
+    {
+      "from": "events",
+      "fromField": "context.questionId",
+      "to": "questions",
+      "toField": "_id",
+      "type": "many-to-one"
+    },
+    {
+      "from": "events",
+      "fromField": "context.zoneId",
+      "to": "zones",
+      "toField": "_id",
+      "type": "many-to-one"
+    },
+    {
+      "from": "leaderboards",
+      "fromField": "playerId",
+      "to": "players",
+      "toField": "playerId",
+      "type": "many-to-one"
+    }
+  ],
+  "recommendedQueries": [
+    {
+      "description": "Player activity summary",
+      "naturalLanguage": "Give me a summary of activities for each player",
+      "mongoQuery": "db.events.aggregate([\n  { $group: {\n    _id: \"$playerId\",\n    totalEvents: { $sum: 1 },\n    questionEvents: { $sum: { $cond: [{ $eq: [\"$type\", \"question\"] }, 1, 0] } },\n    itemEvents: { $sum: { $cond: [{ $eq: [\"$type\", \"item\"] }, 1, 0] } },\n    zoneEvents: { $sum: { $cond: [{ $eq: [\"$type\", \"zone\"] }, 1, 0] } }\n  }},\n  { $lookup: { from: \"players\", localField: \"_id\", foreignField: \"playerId\", as: \"playerDetails\" } },\n  { $unwind: { path: \"$playerDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: {\n    playerId: \"$_id\",\n    playerName: \"$playerDetails.name\",\n    totalEvents: 1,\n    questionEvents: 1,\n    itemEvents: 1,\n    zoneEvents: 1,\n    _id: 0\n  }},\n  { $sort: { totalEvents: -1 } }\n])"
+    },
+    {
+      "description": "Question difficulty analysis",
+      "naturalLanguage": "Which questions are answered most frequently?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"question\" } },\n  { $group: {\n    _id: \"$context.questionId\",\n    timesAnswered: { $sum: 1 }\n  }},\n  { $lookup: { from: \"questions\", localField: \"_id\", foreignField: \"_id\", as: \"questionDetails\" } },\n  { $unwind: { path: \"$questionDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: {\n    questionId: \"$_id\",\n    questionText: \"$questionDetails.text\",\n    timesAnswered: 1,\n    _id: 0\n  }},\n  { $sort: { timesAnswered: -1 } }\n])"
+    },
+    {
+      "description": "Player progression path",
+      "naturalLanguage": "Show me the progression path for player X",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { playerId: \"<player_id>\" } },\n  { $sort: { time: 1 } },\n  { $project: {\n    eventType: \"$type\",\n    time: 1,\n    details: {\n      $switch: {\n        branches: [\n          { case: { $eq: [\"$type\", \"question\"] }, then: { $concat: [\"Question: \", { $toString: \"$context.questionId\" }] } },\n          { case: { $eq: [\"$type\", \"item\"] }, then: { $concat: [\"Item: \", { $toString: \"$context.itemId\" }] } },\n          { case: { $eq: [\"$type\", \"zone\"] }, then: { $concat: [\"Zone: \", { $toString: \"$context.zoneId\" }] } }\n        ],\n        default: \"Other\"\n      }\n    }\n  }}\n])"
+    },
+    {
+      "description": "Zone popularity by player count",
+      "naturalLanguage": "Which zones are visited by the most unique players?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"zone\" } },\n  { $group: {\n    _id: \"$context.zoneId\",\n    uniquePlayers: { $addToSet: \"$playerId\" },\n    totalVisits: { $sum: 1 }\n  }},\n  { $lookup: { from: \"zones\", localField: \"_id\", foreignField: \"_id\", as: \"zoneDetails\" } },\n  { $unwind: { path: \"$zoneDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: {\n    zoneId: \"$_id\",\n    zoneName: \"$zoneDetails.name\",\n    uniquePlayerCount: { $size: \"$uniquePlayers\" },\n    totalVisits: 1,\n    _id: 0\n  }},\n  { $sort: { uniquePlayerCount: -1 } }\n])"
+    },
+    {
+      "description": "Item collection timeline",
+      "naturalLanguage": "Show me when items are collected throughout the game",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"item\" } },\n  { $group: {\n    _id: { $dateToString: { format: \"%Y-%m-%d\", date: \"$time\" } },\n    itemsCollected: { $sum: 1 },\n    uniqueItems: { $addToSet: \"$context.itemId\" }\n  }},\n  { $project: {\n    date: \"$_id\",\n    itemsCollected: 1,\n    uniqueItemCount: { $size: \"$uniqueItems\" },\n    _id: 0\n  }},\n  { $sort: { date: 1 } }\n])"
+    }
+  ]
+}

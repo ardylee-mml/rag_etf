@@ -1,0 +1,15 @@
+{
+  "totalCollections": 5,
+  "totalRelationships": 3,
+  "totalQueryPatterns": 10,
+  "totalQuestions": 20,
+  "successfulQueries": 15,
+  "failedQueries": 3,
+  "timeoutQueries": 2,
+  "optimizedQueries": 8,
+  "lastRunTimestamp": "2023-06-15T10:30:00.000Z",
+  "collections": 5,
+  "relationships": 3,
+  "queryPatterns": 10,
+  "questions": 20
+}

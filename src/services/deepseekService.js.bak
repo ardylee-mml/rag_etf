@@ -1,0 +1,1202 @@
+const axios = require('axios');
+const { LRUCache } = require('lru-cache');
+const mongodbSchema = require('mongodb-schema');
+const mongoose = require('mongoose');
+const promptEngineeringService = require('./promptEngineeringService');
+const collectionSummaryService = require('./collectionSummaryService');
+
+class DeepSeekService {
+    constructor() {
+        this.apiKey = process.env.DEEPSEEK_API_KEY;
+        this.apiEndpoint = 'https://api.deepseek.com/v1/chat/completions';
+        this.maxRetries = 3;
+        this.retryDelay = 1000; // 1 second
+
+        // Initialize conversation history cache with separate windows
+        this.conversationCache = new LRUCache({
+            max: 1000,
+            ttl: 1000 * 60 * 60, // 1 hour
+        });
+
+        // Initialize token usage monitoring
+        this.tokenUsage = {
+            daily: 0,
+            lastReset: new Date(),
+        };
+
+        // Query type temperature mappings
+        this.temperatureSettings = {
+            factual: 0.1,    // Precise, factual queries
+            analytical: 0.3,  // Analysis and comparisons
+            creative: 0.7,    // More creative responses
+            default: 0.5     // Default temperature
+        };
+    }
+
+    async getCollectionSchema(collectionName) {
+        try {
+            const db = mongoose.connection.db;
+            const collection = db.collection(collectionName);
+
+            // Get a larger sample for better schema analysis
+            const sampleDocs = await collection.find().limit(200).toArray();
+
+            // Get collection stats for additional context
+            const stats = await db.command({ collStats: collectionName });
+
+            // Analyze the schema using SchemaAnalyzer
+            const schemaAnalyzer = new mongodbSchema.SchemaAnalyzer();
+            const schema = await schemaAnalyzer.analyze(sampleDocs);
+
+            // Add collection statistics to the schema
+            schema.stats = {
+                count: stats.count,
+                size: stats.size,
+                avgObjSize: stats.avgObjSize
+            };
+
+            // Add sample document for reference
+            if (sampleDocs.length > 0) {
+                schema.sampleDocument = sampleDocs[0];
+            }
+
+            // If this is the events collection, get additional information about event types
+            if (collectionName === 'events') {
+                // Get counts of different event types
+                const eventTypes = {};
+                const typeAggregation = await collection.aggregate([
+                    { $group: { _id: "$type", count: { $sum: 1 } } },
+                    { $sort: { count: -1 } }
+                ]).toArray();
+
+                typeAggregation.forEach(type => {
+                    eventTypes[type._id] = type.count;
+                });
+
+                schema.eventTypes = eventTypes;
+            }
+
+            return this.formatSchemaForContext(schema);
+        } catch (error) {
+            console.error('Error getting collection schema:', error);
+            return null;
+        }
+    }
+
+    formatSchemaForContext(schema) {
+        // Convert MongoDB schema to a more readable format for the LLM
+        let formattedSchema = 'Collection Schema:\n';
+
+        // Add collection statistics if available
+        if (schema.stats) {
+            formattedSchema += `\nCollection Statistics:\n`;
+            formattedSchema += `- Document count: ${schema.stats.count.toLocaleString()}\n`;
+            formattedSchema += `- Collection size: ${Math.round(schema.stats.size / 1024 / 1024)} MB\n`;
+            formattedSchema += `- Average document size: ${Math.round(schema.stats.avgObjSize)} bytes\n`;
+        }
+
+        // Add event type information if available
+        if (schema.eventTypes) {
+            formattedSchema += `\nEvent Types Distribution:\n`;
+            Object.entries(schema.eventTypes)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([type, count]) => {
+                    formattedSchema += `- ${type}: ${count.toLocaleString()} events (${Math.round(count/schema.stats.count*100)}%)\n`;
+                });
+        }
+
+        // Add field information with more details
+        formattedSchema += '\nFields:\n';
+        schema.fields.forEach(field => {
+            formattedSchema += `- ${field.name} (${field.types.join('|')})\n`;
+
+            // Add presence information
+            if (field.probability < 1) {
+                formattedSchema += `  • Optional (${Math.round(field.probability * 100)}% present)\n`;
+            } else {
+                formattedSchema += `  • Required (100% present)\n`;
+            }
+
+            // Add sample values if available
+            if (field.values && field.values.length > 0) {
+                const sampleValues = field.values.slice(0, 3).map(v =>
+                    typeof v === 'object' ? JSON.stringify(v) : String(v)
+                );
+                formattedSchema += `  • Sample values: ${sampleValues.join(', ')}\n`;
+            }
+
+            // Add nested field information if available
+            if (field.fields && field.fields.length > 0) {
+                formattedSchema += `  • Nested fields:\n`;
+                field.fields.forEach(nestedField => {
+                    formattedSchema += `    - ${nestedField.name} (${nestedField.types.join('|')})\n`;
+                });
+            }
+        });
+
+        // Add a sample document for reference
+        if (schema.sampleDocument) {
+            formattedSchema += `\nSample Document:\n`;
+            formattedSchema += `\`\`\`json\n${JSON.stringify(schema.sampleDocument, null, 2)}\n\`\`\`\n`;
+        }
+
+        return formattedSchema;
+    }
+
+    determineQueryType(query) {
+        const query_lower = query.toLowerCase();
+
+        // Factual queries typically ask for specific data
+        if (query_lower.match(/^(what|when|where|who|how many|find|get|show)/)) {
+            return 'factual';
+        }
+
+        // Analytical queries often involve comparison or analysis
+        if (query_lower.match(/(compare|analyze|explain|why|relationship|trend|pattern)/)) {
+            return 'analytical';
+        }
+
+        // Creative queries might ask for suggestions or possibilities
+        if (query_lower.match(/(suggest|recommend|could|would|might|possible|creative)/)) {
+            return 'creative';
+        }
+
+        return 'default';
+    }
+
+    async processQuery(query, collectionName, schemaInfo = null, conversationId = null) {
+        try {
+            console.log('Processing query:', query);
+            console.log('Collection:', collectionName);
+            console.log('Schema info provided:', schemaInfo ? 'Yes' : 'No');
+            console.log('Conversation ID:', conversationId || 'None (new conversation)');
+
+            // Get conversation history with separate context windows
+            let history = this.getConversationHistory(conversationId);
+            console.log('Retrieved conversation history:',
+                Object.keys(history).map(key => `${key}: ${history[key]?.length || 0} messages`));
+
+            // Generate dynamic prompt with context
+            console.log('Generating prompt with context...');
+            const promptResult = await promptEngineeringService.generatePromptWithContext(
+                collectionName,
+                query,
+                {
+                    businessRules: this.extractBusinessRules(history),
+                    schemaInfo: schemaInfo
+                }
+            );
+
+            if (promptResult.error) {
+                console.error('Prompt generation error:', promptResult.error);
+                console.error('Issues:', promptResult.issues);
+                return {
+                    error: promptResult.error,
+                    issues: promptResult.issues
+                };
+            }
+
+            console.log('Prompt generated successfully!');
+
+            // Determine query type and set temperature
+            const queryType = this.determineQueryType(query);
+            const temperature = this.temperatureSettings[queryType];
+            console.log('Query type:', queryType);
+            console.log('Temperature:', temperature);
+
+            // Add specific instructions for common query patterns
+            let enhancedPrompt = promptResult.prompt;
+            console.log('Prompt length:', enhancedPrompt.length);
+
+            // Add specific instructions for counting queries
+            if (query.toLowerCase().includes('count') || query.toLowerCase().includes('how many')) {
+                console.log('Adding specific instructions for counting queries...');
+                enhancedPrompt += `\n\nThis appears to be a counting query. For counting queries:
+1. Use $group stage with appropriate _id field to group by the relevant attribute
+2. Use $count or $sum to count occurrences
+3. Consider using $match first to filter relevant documents
+4. For questions specifically, look at events with type 'question' and group by 'context.questionId'`;
+            }
+
+            // Prepare messages with enhanced context
+            console.log('Preparing messages for Deepseek API...');
+            const formattedHistory = this.formatHistoryForContext(history);
+            console.log('Formatted history messages:', formattedHistory.length);
+
+            // Get relevant collection summaries
+            let collectionSummaries = '';
+            try {
+                // Check if collection summaries are loaded
+                console.log('Collection summaries loaded status:', collectionSummaryService.loaded);
+                if (!collectionSummaryService.loaded) {
+                    console.log('Loading collection summaries...');
+                    await collectionSummaryService.loadSummaries();
+                    console.log('Collection summaries loaded status after loading:', collectionSummaryService.loaded);
+                }
+
+                // Get relevant summaries for this query
+                console.log('Getting relevant summaries for query:', query);
+                console.log('Primary collection:', collectionName);
+
+                // Check available summaries
+                const availableSummaries = Object.keys(collectionSummaryService.summaries);
+                console.log('Available summaries:', availableSummaries);
+
+                collectionSummaries = collectionSummaryService.getRelevantSummariesForQuery(query, collectionName);
+                console.log(`Retrieved ${collectionSummaries.length} characters of collection summary information`);
+
+                // Log a preview of the summaries
+                if (collectionSummaries.length > 0) {
+                    console.log('Collection summaries preview:', collectionSummaries.substring(0, 200) + '...');
+                } else {
+                    console.log('No collection summaries retrieved');
+                }
+            } catch (error) {
+                console.error('Error loading collection summaries:', error);
+                console.log('Continuing without collection summaries');
+            }
+
+            // Add specific instructions based on query type
+            let userPrompt = `Generate a MongoDB aggregation pipeline for the following query: "${query}".
+The collection is "${collectionName}".
+
+IMPORTANT INSTRUCTIONS:
+1. Your response must be a valid MongoDB aggregation pipeline in JSON array format
+2. Return ONLY the pipeline array with no additional text, explanation, or markdown formatting
+3. Make sure the pipeline directly answers the query
+4. For player activity queries, always group by playerId and count events
+5. For "how many" queries, include a $count stage at the end
+6. For "more than X times" queries, use $match with $gt operator after grouping
+
+${collectionSummaries}
+
+Key field mappings to remember:
+- Questions are referenced in events through context.questionId
+- Question IDs are UUIDs (not MongoDB ObjectIds), so no need for $toObjectId conversion
+- Events of type "question" represent answered questions
+- Question answers include context.choiceId to indicate the selected answer
+- Players are identified by playerId (not _id)
+- Items are referenced through context.itemId in events of type "item"
+- Zones are referenced through context.zoneId in events of type "zone"
+- Timestamp field is called "time" in the events collection
+
+For player activity queries like "How many players played more than X times?", follow this pattern:
+[
+  { "$group": { "_id": "$playerId", "count": { "$sum": 1 } } },
+  { "$match": { "count": { "$gt": X } } },
+  { "$count": "totalPlayers" }
+]
+`;
+
+            // Add specific guidance for player activity queries
+            if ((query.toLowerCase().includes('player') || query.toLowerCase().includes('players')) &&
+                (query.toLowerCase().includes('played') || query.toLowerCase().includes('time') ||
+                 query.toLowerCase().includes('times') || query.toLowerCase().includes('activity'))) {
+
+                userPrompt += `
+For player activity queries, follow these steps:
+1. If the query includes a date range or time period, add a $match stage to filter by the time field
+2. Group events by playerId using $group
+3. Count occurrences for each player using $sum
+4. Filter players based on the count threshold (e.g., $gt, $gte, $eq)
+5. Lookup player details from the players collection
+6. Project relevant fields including playerId, playerName, and activityCount
+7. Sort by activity count in descending order
+
+Example pipeline for "How many players played more than 3 times?":
+[
+  { "$group": { "_id": "$playerId", "count": { "$sum": 1 } } },
+  { "$match": { "count": { "$gt": 3 } } },
+  { "$count": "totalPlayers" }
+]
+
+Example pipeline for "What is the percentage of players who played more than 3 times?":
+[
+  // Group events by player to count how many times each player played
+  {
+    "$group": {
+      "_id": "$playerId",
+      "playCount": { "$sum": 1 }
+    }
+  },
+
+  // Add a field to identify players who played more than 3 times
+  {
+    "$addFields": {
+      "playedMoreThanNTimes": { "$gt": ["$playCount", 3] }
+    }
+  },
+
+  // Group all results to calculate percentages
+  {
+    "$group": {
+      "_id": null,
+      "totalPlayers": { "$sum": 1 },
+      "playersMoreThanNTimes": {
+        "$sum": { "$cond": [{ "$eq": ["$playedMoreThanNTimes", true] }, 1, 0] }
+      }
+    }
+  },
+
+  // Calculate the percentage
+  {
+    "$project": {
+      "_id": 0,
+      "totalPlayers": 1,
+      "playersMoreThanNTimes": 1,
+      "percentage": {
+        "$multiply": [
+          { "$divide": ["$playersMoreThanNTimes", "$totalPlayers"] },
+          100
+        ]
+      }
+    }
+  }
+]
+
+Example pipeline for "How many players played more than 3 times in May 2024?":
+[
+  { "$match": {
+      "time": {
+        "$gte": ISODate("2024-05-01T00:00:00.000Z"),
+        "$lt": ISODate("2024-06-01T00:00:00.000Z")
+      }
+  }},
+  { "$group": { "_id": "$playerId", "count": { "$sum": 1 } } },
+  { "$match": { "count": { "$gt": 3 } } },
+  { "$count": "totalPlayers" }
+]
+`;
+            }
+
+            // Add specific guidance for leaderboard and score queries
+            if (collectionName === 'leaderboards' ||
+                query.toLowerCase().includes('score') ||
+                query.toLowerCase().includes('leaderboard') ||
+                query.toLowerCase().includes('ranking') ||
+                query.toLowerCase().includes('top player')) {
+
+                userPrompt += `
+For leaderboard and score queries, follow these steps:
+1. For average score: Use $group with $avg: "$score"
+2. For highest/top scores: Use $sort with score: -1 and $limit
+3. For player rankings: Use $sort and $project to include relevant fields
+4. For score statistics: Use $group with operators like $avg, $min, $max, $sum
+
+Example pipeline for "What is the average player score?":
+[
+  { "$group": { "_id": null, "averageScore": { "$avg": "$score" } } },
+  { "$project": { "_id": 0, "averageScore": 1 } }
+]
+
+Example pipeline for "Who has the highest score?":
+[
+  { "$sort": { "score": -1 } },
+  { "$limit": 1 },
+  { "$project": { "_id": 0, "playerName": 1, "score": 1 } }
+]
+
+Example pipeline for "Show me the top 5 players by score":
+[
+  { "$sort": { "score": -1 } },
+  { "$limit": 5 },
+  { "$project": { "_id": 0, "playerName": 1, "score": 1, "level": 1 } }
+]
+`;
+            }
+
+            userPrompt += `
+Return ONLY the MongoDB aggregation pipeline as a JSON array with no additional text or explanation.`;
+
+            const messages = [
+                {
+                    role: 'system',
+                    content: enhancedPrompt
+                },
+                ...formattedHistory,
+                {
+                    role: 'user',
+                    content: userPrompt
+                }
+            ];
+            console.log('Total messages prepared:', messages.length);
+
+            // Make API call with retries
+            console.log('Making API call to Deepseek...');
+            const response = await this.makeRequestWithRetries(messages, temperature);
+            console.log('Received response from Deepseek API!');
+
+            // Update conversation history
+            if (conversationId) {
+                console.log('Updating conversation history...');
+                this.updateConversationHistory(conversationId, query, response.content, promptResult.schema);
+            }
+
+            // Update token usage
+            console.log('Updating token usage...');
+            this.updateTokenUsage(response.usage);
+            console.log('Current daily token usage:', this.tokenUsage.daily);
+
+            // Try to extract a valid MongoDB pipeline from the response
+            console.log('Extracting MongoDB pipeline from response...');
+            console.log('Raw LLM response:', response.content);
+
+            let pipeline = this.extractMongoDBPipeline(response.content, query, collectionName);
+            console.log('Pipeline extraction complete!');
+            console.log('Extracted pipeline:', JSON.stringify(pipeline));
+
+            // Check if the pipeline is valid
+            const isValidPipeline = this.isValidPipeline(pipeline);
+            console.log('Is valid pipeline:', isValidPipeline);
+
+            // If the pipeline is not valid, set a flag but don't use a fallback
+            const isFallback = !isValidPipeline;
+            console.log('Query failed:', isFallback ? 'Yes' : 'No');
+
+            return {
+                content: JSON.stringify(pipeline),
+                rawContent: response.content,
+                queryType,
+                tokenUsage: response.usage,
+                conversationId: conversationId || this.generateConversationId(),
+                safetyCheck: promptResult.safetyCheck,
+                isFallback: isFallback
+            };
+
+        } catch (error) {
+            console.error('Error processing query:', error.message);
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
+            return this.handleFailure(error);
+        }
+    }
+
+    getConversationHistory(conversationId) {
+        if (!conversationId) return {};
+
+        return this.conversationCache.get(conversationId) || {
+            schema: [],      // Schema-related context
+            business: [],    // Business logic context
+            security: []     // Security context
+        };
+    }
+
+    formatHistoryForContext(history) {
+        const formattedHistory = [];
+
+        // Add relevant context from each window
+        ['schema', 'business', 'security'].forEach(window => {
+            if (history[window] && history[window].length > 0) {
+                // Take last 3 messages from each context window
+                const windowHistory = history[window].slice(-3);
+                formattedHistory.push(...windowHistory);
+            }
+        });
+
+        return formattedHistory;
+    }
+
+    updateConversationHistory(conversationId, query, response, schema) {
+        const history = this.getConversationHistory(conversationId);
+
+        // Categorize the interaction into appropriate context windows
+        if (this.isSchemaRelated(query)) {
+            history.schema.push(
+                { role: 'user', content: query },
+                { role: 'assistant', content: response }
+            );
+        }
+
+        if (this.isBusinessLogicRelated(query)) {
+            history.business.push(
+                { role: 'user', content: query },
+                { role: 'assistant', content: response }
+            );
+        }
+
+        if (this.isSecurityRelated(query, schema)) {
+            history.security.push(
+                { role: 'user', content: query },
+                { role: 'assistant', content: response }
+            );
+        }
+
+        // Trim each context window to maintain last 3 interactions
+        ['schema', 'business', 'security'].forEach(window => {
+            if (history[window].length > 6) { // 3 interactions * 2 messages each
+                history[window] = history[window].slice(-6);
+            }
+        });
+
+        this.conversationCache.set(conversationId, history);
+    }
+
+    isSchemaRelated(query) {
+        const schemaKeywords = ['schema', 'field', 'type', 'structure', 'model', 'attribute'];
+        return schemaKeywords.some(keyword => query.toLowerCase().includes(keyword));
+    }
+
+    isBusinessLogicRelated(query) {
+        const businessKeywords = ['rule', 'policy', 'requirement', 'constraint', 'validation'];
+        return businessKeywords.some(keyword => query.toLowerCase().includes(keyword));
+    }
+
+    isSecurityRelated(query, schema) {
+        // Check if query involves sensitive fields or write operations
+        return schema.sensitiveFields.some(field => query.toLowerCase().includes(field)) ||
+               promptEngineeringService.writeOperations.some(op => query.toLowerCase().includes(op));
+    }
+
+    extractBusinessRules(history) {
+        if (!history.business) return [];
+
+        // Extract business rules from previous interactions
+        const rules = new Set();
+        history.business.forEach(msg => {
+            if (msg.role === 'assistant' && msg.content.includes('rule:')) {
+                const rule = msg.content.split('rule:')[1].split('\n')[0].trim();
+                rules.add(rule);
+            }
+        });
+
+        return Array.from(rules);
+    }
+
+    async makeRequestWithRetries(messages, temperature, retryCount = 0) {
+        try {
+            console.log('Making Deepseek API request...');
+            console.log('API Key:', this.apiKey ? 'Found (first 5 chars: ' + this.apiKey.substring(0, 5) + '...)' : 'Not found');
+            console.log('Temperature:', temperature);
+            console.log('Messages:', JSON.stringify(messages.map(m => ({ role: m.role, content_preview: m.content.substring(0, 50) + '...' }))));
+
+            const response = await axios.post(
+                this.apiEndpoint,
+                {
+                    model: 'deepseek-chat',
+                    messages,
+                    temperature,
+                    max_tokens: 2000
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${this.apiKey}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            console.log('Deepseek API response received!');
+            console.log('Response status:', response.status);
+            console.log('Token usage:', JSON.stringify(response.data.usage));
+            console.log('Response content preview:', response.data.choices[0].message.content.substring(0, 100) + '...');
+
+            return {
+                content: response.data.choices[0].message.content,
+                usage: response.data.usage
+            };
+
+        } catch (error) {
+            console.error('Error making Deepseek API request:', error.message);
+
+            if (error.response) {
+                console.error('Response status:', error.response.status);
+                console.error('Response data:', JSON.stringify(error.response.data));
+            }
+
+            if (retryCount < this.maxRetries) {
+                console.log(`Retrying Deepseek API request (attempt ${retryCount + 1}/${this.maxRetries})...`);
+                const delay = this.retryDelay * Math.pow(2, retryCount);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return this.makeRequestWithRetries(messages, temperature, retryCount + 1);
+            }
+
+            console.error('All retry attempts failed. Throwing error.');
+            throw error;
+        }
+    }
+
+    handleFailure(error) {
+        if (error.response?.status === 429) {
+            return {
+                content: "I'm currently experiencing high demand. Please try again in a moment.",
+                error: 'RATE_LIMIT_EXCEEDED'
+            };
+        }
+
+        if (error.response?.status === 401) {
+            return {
+                content: "There's an issue with the API authentication. Please contact support.",
+                error: 'AUTHENTICATION_ERROR'
+            };
+        }
+
+        return {
+            content: "I'm having trouble processing your request. Please try again or rephrase your query.",
+            error: 'GENERAL_ERROR'
+        };
+    }
+
+    updateTokenUsage(usage) {
+        const now = new Date();
+
+        if (now.getDate() !== this.tokenUsage.lastReset.getDate()) {
+            this.tokenUsage.daily = 0;
+            this.tokenUsage.lastReset = now;
+        }
+
+        this.tokenUsage.daily += usage.total_tokens;
+
+        if (this.tokenUsage.daily > process.env.DAILY_TOKEN_LIMIT * 0.9) {
+            console.warn('Approaching daily token usage limit');
+        }
+    }
+
+    generateConversationId() {
+        return `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    getTokenUsage() {
+        return {
+            daily: this.tokenUsage.daily,
+            lastReset: this.tokenUsage.lastReset
+        };
+    }
+
+    extractMongoDBPipeline(content, query, collectionName) {
+        try {
+            console.log('Extracting MongoDB pipeline from LLM response...');
+            console.log('Response content preview:', content.substring(0, 100) + '...');
+
+            // Special case for player play frequency queries
+            const lowerQuery = query.toLowerCase();
+            if (lowerQuery.includes('percentage') &&
+                lowerQuery.includes('player') &&
+                lowerQuery.includes('played more than') &&
+                collectionName === 'events') {
+
+                console.log('Detected player play frequency query, using direct pattern');
+
+                // Extract the threshold from the query
+                const thresholdMatch = lowerQuery.match(/more than (\d+) times/);
+                const threshold = thresholdMatch ? parseInt(thresholdMatch[1]) : 3;
+
+                console.log(`Using threshold: ${threshold}`);
+
+                return [
+                    // Group events by player to count how many times each player played
+                    {
+                        $group: {
+                            _id: "$playerId",
+                            playCount: { $sum: 1 }
+                        }
+                    },
+
+                    // Add a field to identify players who played more than threshold times
+                    {
+                        $addFields: {
+                            playedMoreThanThreshold: { $gt: ["$playCount", threshold] }
+                        }
+                    },
+
+                    // Group all results to calculate percentages
+                    {
+                        $group: {
+                            _id: null,
+                            totalPlayers: { $sum: 1 },
+                            playersMoreThanThreshold: {
+                                $sum: { $cond: [{ $eq: ["$playedMoreThanThreshold", true] }, 1, 0] }
+                            }
+                        }
+                    },
+
+                    // Calculate the percentage
+                    {
+                        $project: {
+                            _id: 0,
+                            totalPlayers: 1,
+                            playersMoreThanThreshold: 1,
+                            percentage: {
+                                $multiply: [
+                                    { $divide: ["$playersMoreThanThreshold", "$totalPlayers"] },
+                                    100
+                                ]
+                            }
+                        }
+                    }
+                ];
+            }
+
+            // Try to parse the content directly as JSON
+            try {
+                console.log('Attempting to parse content directly as JSON...');
+                const pipeline = JSON.parse(content);
+                if (Array.isArray(pipeline)) {
+                    console.log('Successfully parsed content as JSON array!');
+                    console.log('Pipeline:', JSON.stringify(pipeline));
+
+                    // Check if this is a date-based query and the pipeline doesn't have a date filter
+                    const hasDateReference = this.hasDateReference(lowerQuery);
+                    const hasDateFilter = this.pipelineHasDateFilter(pipeline);
+
+                    console.log('Query has date reference:', hasDateReference);
+                    console.log('Pipeline has date filter:', hasDateFilter);
+
+                    if (hasDateReference && !hasDateFilter && collectionName === 'events') {
+                        console.log('Adding missing date filter to pipeline...');
+                        const dateFilter = this.extractDateFilter(lowerQuery);
+                        if (dateFilter) {
+                            console.log('Date filter extracted:', JSON.stringify(dateFilter));
+                            // Add the date filter to the beginning of the pipeline
+                            pipeline.unshift({ $match: dateFilter });
+                            console.log('Updated pipeline with date filter:', JSON.stringify(pipeline));
+                        }
+                    }
+
+                    return pipeline;
+                } else {
+                    console.log('Content parsed as JSON but is not an array:', typeof pipeline);
+                }
+            } catch (e) {
+                console.log('Content is not valid JSON, continuing with extraction:', e.message);
+            }
+
+            // Try to extract JSON array from the content using regex
+            console.log('Attempting to extract JSON array using regex...');
+            const jsonMatch = content.match(/\[\s*\{.*\}\s*\]/s);
+            if (jsonMatch) {
+                console.log('Found potential JSON array in content!');
+                try {
+                    const extractedPipeline = JSON.parse(jsonMatch[0]);
+                    console.log('Successfully parsed extracted JSON!');
+                    console.log('Pipeline:', JSON.stringify(extractedPipeline));
+
+                    // Check if this is a date-based query and the pipeline doesn't have a date filter
+                    const lowerQuery = query.toLowerCase();
+                    const hasDateReference = this.hasDateReference(lowerQuery);
+                    const hasDateFilter = this.pipelineHasDateFilter(extractedPipeline);
+
+                    console.log('Query has date reference:', hasDateReference);
+                    console.log('Pipeline has date filter:', hasDateFilter);
+
+                    if (hasDateReference && !hasDateFilter && collectionName === 'events') {
+                        console.log('Adding missing date filter to pipeline...');
+                        const dateFilter = this.extractDateFilter(lowerQuery);
+                        if (dateFilter) {
+                            console.log('Date filter extracted:', JSON.stringify(dateFilter));
+                            // Add the date filter to the beginning of the pipeline
+                            extractedPipeline.unshift({ $match: dateFilter });
+                            console.log('Updated pipeline with date filter:', JSON.stringify(extractedPipeline));
+                        }
+                    }
+
+                    return extractedPipeline;
+                } catch (e) {
+                    console.error('Error parsing extracted JSON:', e.message);
+                }
+            } else {
+                console.log('No JSON array pattern found in content');
+            }
+
+            // If we couldn't extract a valid pipeline, return an empty pipeline with an error message
+            console.log('Failed to extract a valid pipeline');
+            return [
+                { $match: { _id: "QUERY_GENERATION_FAILED" } },
+                { $project: {
+                    error: { $literal: "Failed to generate a valid MongoDB query for your question. Please try rephrasing or provide more specific details." },
+                    _id: 0
+                }}
+            ];
+        } catch (error) {
+            console.error('Error extracting MongoDB pipeline:', error.message);
+            console.log('Returning error pipeline...');
+            return [
+                { $match: { _id: "QUERY_GENERATION_FAILED" } },
+                { $project: {
+                    error: { $literal: "An error occurred while processing your query: " + error.message },
+                    _id: 0
+                }}
+            ];
+        }
+    }
+
+    /**
+     * Check if a pipeline is valid
+     * @param {Array} pipeline
+     * @returns {boolean}
+     */
+    isValidPipeline(pipeline) {
+        if (!Array.isArray(pipeline)) return false;
+
+        // Check if this is our error pipeline
+        if (pipeline.length > 0 &&
+            pipeline[0].$match &&
+            pipeline[0].$match._id === "QUERY_GENERATION_FAILED") {
+            return false;
+        }
+
+        // Check if the pipeline has at least one valid stage
+        return pipeline.length > 0 &&
+               pipeline.every(stage => {
+                   // Each stage should be an object with at least one MongoDB operator
+                   return typeof stage === 'object' &&
+                          stage !== null &&
+                          Object.keys(stage).some(key => key.startsWith('$'));
+               });
+    }
+
+    /**
+     * Check if a query contains a date reference
+     * @param {string} query
+     * @returns {boolean}
+     */
+    hasDateReference(query) {
+        const datePatterns = [
+            /in\s+(january|february|march|april|may|june|july|august|september|october|november|december)/i,
+            /in\s+(\d{4})/i,
+            /in\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/i,
+            /last\s+(day|week|month|year)/i,
+            /past\s+(\d+)\s+(day|days|week|weeks|month|months|year|years)/i,
+            /since\s+(\d{4})/i,
+            /between\s+(\d{4})\s+and\s+(\d{4})/i,
+            /from\s+(\d{4})\s+to\s+(\d{4})/i
+        ];
+
+        return datePatterns.some(pattern => pattern.test(query));
+    }
+
+    /**
+     * Check if a pipeline has a date filter
+     * @param {Array} pipeline
+     * @returns {boolean}
+     */
+    pipelineHasDateFilter(pipeline) {
+        if (!Array.isArray(pipeline)) return false;
+
+        // Check if any stage has a $match with a date filter
+        return pipeline.some(stage => {
+            if (!stage.$match) return false;
+
+            // Check for time field with date operators
+            return stage.$match.time &&
+                  (stage.$match.time.$gte ||
+                   stage.$match.time.$gt ||
+                   stage.$match.time.$lte ||
+                   stage.$match.time.$lt);
+        });
+    }
+
+    /**
+     * Extract date filter from query
+     * @param {string} query
+     * @returns {Object|null}
+     */
+    extractDateFilter(query) {
+        // Check for month/year pattern (e.g., "in May 2024")
+        const monthYearPattern = /in\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/i;
+        const monthYearMatch = query.match(monthYearPattern);
+
+        if (monthYearMatch) {
+            const month = monthYearMatch[1].toLowerCase();
+            const year = parseInt(monthYearMatch[2]);
+
+            // Map month name to month number (0-based)
+            const monthMap = {
+                'january': 0, 'february': 1, 'march': 2, 'april': 3, 'may': 4, 'june': 5,
+                'july': 6, 'august': 7, 'september': 8, 'october': 9, 'november': 10, 'december': 11
+            };
+
+            const monthNum = monthMap[month];
+
+            // Create start and end dates for the month
+            const startDate = new Date(year, monthNum, 1);
+            const endDate = new Date(year, monthNum + 1, 1);
+
+            console.log(`Extracted date filter for ${month} ${year}`);
+            console.log(`Start date: ${startDate.toISOString()}`);
+            console.log(`End date: ${endDate.toISOString()}`);
+
+            return {
+                time: {
+                    $gte: startDate,
+                    $lt: endDate
+                }
+            };
+        }
+
+        // Add more date pattern extractors as needed
+
+        return null;
+    }
+
+    generateFallbackPipeline(query, collectionName) {
+        // Generate a fallback pipeline based on the query keywords
+        const lowerQuery = query.toLowerCase();
+        console.log('Generating fallback pipeline for query:', query);
+        console.log('Collection:', collectionName);
+
+        // Handle player activity/frequency queries
+        console.log('Checking if query is a player activity query:', lowerQuery);
+        console.log('Contains "player":', lowerQuery.includes('player'));
+        console.log('Contains "players":', lowerQuery.includes('players'));
+        console.log('Contains "played":', lowerQuery.includes('played'));
+        console.log('Contains "time":', lowerQuery.includes('time'));
+        console.log('Contains "times":', lowerQuery.includes('times'));
+
+        // We're no longer using hardcoded pattern matching
+        // Instead, we'll let the LLM generate the appropriate pipeline
+        // based on the enhanced prompt and examples we've provided
+
+        if ((lowerQuery.includes('player') || lowerQuery.includes('players')) &&
+            (lowerQuery.includes('played') || lowerQuery.includes('time') ||
+             lowerQuery.includes('times') || lowerQuery.includes('activity') ||
+             lowerQuery.includes('active') || lowerQuery.includes('login') ||
+             lowerQuery.includes('signin'))) {
+
+            console.log('Detected player activity/frequency query');
+
+            // Check if query is about players who played more than X times
+            const moreThanMatch = lowerQuery.match(/more than (\d+)/);
+            const atLeastMatch = lowerQuery.match(/at least (\d+)/);
+            const exactlyMatch = lowerQuery.match(/exactly (\d+)/);
+
+            let threshold = 1; // Default threshold
+            let comparisonOperator = '$gt'; // Default to greater than
+
+            if (moreThanMatch) {
+                threshold = parseInt(moreThanMatch[1]);
+                comparisonOperator = '$gt';
+                console.log(`Detected "more than ${threshold}" pattern`);
+            } else if (atLeastMatch) {
+                threshold = parseInt(atLeastMatch[1]);
+                comparisonOperator = '$gte';
+                console.log(`Detected "at least ${threshold}" pattern`);
+            } else if (exactlyMatch) {
+                threshold = parseInt(exactlyMatch[1]);
+                comparisonOperator = '$eq';
+                console.log(`Detected "exactly ${threshold}" pattern`);
+            } else if (lowerQuery.includes('once')) {
+                threshold = 1;
+                comparisonOperator = '$eq';
+                console.log('Detected "once" pattern');
+            }
+
+            // Check for date/time filters
+            let dateFilter = null;
+
+            // Check for month/year patterns
+            const monthYearPattern = /in\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/i;
+            const monthYearMatch = lowerQuery.match(monthYearPattern);
+
+            if (monthYearMatch) {
+                const month = monthYearMatch[1].toLowerCase();
+                const year = parseInt(monthYearMatch[2]);
+
+                // Map month name to month number (0-based)
+                const monthMap = {
+                    'january': 0, 'february': 1, 'march': 2, 'april': 3, 'may': 4, 'june': 5,
+                    'july': 6, 'august': 7, 'september': 8, 'october': 9, 'november': 10, 'december': 11
+                };
+
+                const monthNum = monthMap[month];
+
+                // Create start and end dates for the month
+                const startDate = new Date(year, monthNum, 1);
+                const endDate = new Date(year, monthNum + 1, 1);
+
+                console.log(`Detected date filter for ${month} ${year}`);
+                console.log(`Start date: ${startDate.toISOString()}`);
+                console.log(`End date: ${endDate.toISOString()}`);
+
+                dateFilter = {
+                    time: {
+                        $gte: startDate,
+                        $lt: endDate
+                    }
+                };
+            }
+
+            // Create a pipeline to count player activity
+            let countPipeline = [];
+
+            // Add date filter if present
+            if (dateFilter) {
+                countPipeline.push({ $match: dateFilter });
+            }
+
+            // Add the rest of the pipeline
+            countPipeline = [
+                ...countPipeline,
+                // Group by playerId and count occurrences
+                { $group: {
+                    _id: '$playerId',
+                    count: { $sum: 1 },
+                    // Optionally collect some sample events for this player
+                    events: { $push: { type: '$type', time: '$time' } }
+                }},
+                // Filter based on the count threshold
+                { $match: {
+                    count: { [comparisonOperator]: threshold }
+                }},
+                // Lookup player details
+                { $lookup: {
+                    from: 'players',
+                    localField: '_id',
+                    foreignField: 'playerId',
+                    as: 'playerDetails'
+                }},
+                // Unwind player details (optional)
+                { $unwind: { path: '$playerDetails', preserveNullAndEmptyArrays: true } },
+                // Project the fields we want
+                { $project: {
+                    playerId: '$_id',
+                    playerName: '$playerDetails.name',
+                    activityCount: '$count',
+                    // Limit the number of sample events to avoid large results
+                    sampleEvents: { $slice: ['$events', 3] },
+                    _id: 0
+                }},
+                // Sort by activity count in descending order
+                { $sort: { activityCount: -1 } }
+            ];
+
+            // If the query is specifically asking "how many", return just the count
+            if (lowerQuery.includes('how many')) {
+                console.log('Query is asking for count, adding $count stage');
+                return [
+                    ...countPipeline,
+                    // Count the total number of players meeting the criteria
+                    { $count: 'totalPlayers' }
+                ];
+            } else {
+                // Otherwise return the detailed list of players
+                console.log('Query is asking for details, returning player list');
+                return countPipeline;
+            }
+        }
+
+        // Handle counting queries
+        if (lowerQuery.includes('count') || lowerQuery.includes('how many')) {
+            if (lowerQuery.includes('question') && collectionName === 'events') {
+                console.log('Detected question counting query');
+                // Count questions answered
+                return [
+                    { $match: { type: 'question' } },
+                    { $group: {
+                        _id: '$context.questionId',
+                        count: { $sum: 1 }
+                    }},
+                    { $lookup: {
+                        from: 'questions',
+                        localField: '_id',
+                        foreignField: '_id',
+                        as: 'questionDetails'
+                    }},
+                    { $unwind: { path: '$questionDetails', preserveNullAndEmptyArrays: true } },
+                    { $project: {
+                        questionId: '$_id',
+                        questionText: '$questionDetails.text',
+                        count: 1,
+                        _id: 0
+                    }},
+                    { $sort: { count: -1 } }
+                    // No limit to show all results
+                ];
+            }
+        }
+
+        // Handle item-related queries
+        if (lowerQuery.includes('item') && collectionName === 'events') {
+            console.log('Detected item-related query');
+            return [
+                { $match: { type: 'item' } },
+                { $group: {
+                    _id: '$context.itemId',
+                    count: { $sum: 1 }
+                }},
+                { $lookup: {
+                    from: 'items',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'itemDetails'
+                }},
+                { $unwind: { path: '$itemDetails', preserveNullAndEmptyArrays: true } },
+                { $project: {
+                    itemId: '$_id',
+                    itemName: '$itemDetails.name',
+                    count: 1,
+                    _id: 0
+                }},
+                { $sort: { count: -1 } }
+            ];
+        }
+
+        // Handle leaderboard and score queries
+        if (collectionName === 'leaderboards') {
+            console.log('Detected leaderboard query');
+
+            // Average score query
+            if (lowerQuery.includes('average') && lowerQuery.includes('score')) {
+                console.log('Detected average score query');
+                return [
+                    { $group: { _id: null, averageScore: { $avg: "$score" } } },
+                    { $project: { _id: 0, averageScore: 1 } }
+                ];
+            }
+
+            // Highest score query
+            if ((lowerQuery.includes('highest') || lowerQuery.includes('top')) &&
+                lowerQuery.includes('score')) {
+                console.log('Detected highest/top score query');
+
+                // Determine limit
+                let limit = 1;
+                const limitMatch = lowerQuery.match(/top (\d+)/);
+                if (limitMatch) {
+                    limit = parseInt(limitMatch[1]);
+                }
+
+                return [
+                    { $sort: { score: -1 } },
+                    { $limit: limit },
+                    { $project: { _id: 0, playerName: 1, score: 1, level: 1 } }
+                ];
+            }
+        }
+
+        // Handle zone-related queries
+        if (lowerQuery.includes('zone') && collectionName === 'events') {
+            console.log('Detected zone-related query');
+            return [
+                { $match: { type: 'zone' } },
+                { $group: {
+                    _id: '$context.zoneId',
+                    count: { $sum: 1 }
+                }},
+                { $lookup: {
+                    from: 'zones',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'zoneDetails'
+                }},
+                { $unwind: { path: '$zoneDetails', preserveNullAndEmptyArrays: true } },
+                { $project: {
+                    zoneId: '$_id',
+                    zoneName: '$zoneDetails.name',
+                    count: 1,
+                    _id: 0
+                }},
+                { $sort: { count: -1 } }
+            ];
+        }
+
+        console.log('No specialized handler found, using default fallback pipeline');
+        // Default fallback
+        return [
+            { $match: {} },
+            { $limit: 10 }
+        ];
+    }
+}
+
+module.exports = new DeepSeekService();

@@ -1,0 +1,148 @@
+{
+  "collectionName": "leaderboards",
+  "count": 141349,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "applicationId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "name": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "playerId": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "amount": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "createdAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "updatedAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "applicationId",
+    "playerId"
+  ],
+  "samples": [
+    {
+      "_id": "ff7707f3-0f43-44a1-be49-59312ca4f708",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 158195484,
+      "__v": 0,
+      "amount": 2028,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    },
+    {
+      "_id": "c1db1504-47a5-407e-93b1-d0f9f97684ee",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 1198057697,
+      "__v": 0,
+      "amount": 1641,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    },
+    {
+      "_id": "2a9f96d9-cbf9-4bf0-b4f6-be28d60d130c",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 5320561796,
+      "__v": 0,
+      "amount": 1599,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    },
+    {
+      "_id": "f2ef71e0-0b59-47e2-92db-11125142c119",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 5328804970,
+      "__v": 0,
+      "amount": 1955,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    },
+    {
+      "_id": "a7138ea9-a31a-45dd-95de-81e4dc1e477f",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 687658920,
+      "__v": 0,
+      "amount": 1664,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all leaderboards",
+      "naturalLanguage": "Show me all leaderboards",
+      "mongoQuery": "db.leaderboards.find({})"
+    },
+    {
+      "description": "Find top players by score",
+      "naturalLanguage": "Who are the top 10 players by score?",
+      "mongoQuery": "db.leaderboards.find().sort({ score: -1 }).limit(10)"
+    },
+    {
+      "description": "Find leaderboard entries for a specific player",
+      "naturalLanguage": "Show me the leaderboard entries for player X",
+      "mongoQuery": "db.leaderboards.find({ playerId: \"<player_id>\" })"
+    }
+  ]
+}

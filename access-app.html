@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access MongoDB RAG Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Access MongoDB RAG Interface</h1>
+    
+    <div class="card">
+        <h2>Direct Access Links</h2>
+        <p>Click one of the following links to access the application:</p>
+        <a href="http://localhost:5173" class="button" target="_blank">Open App (localhost)</a>
+        <a href="http://127.0.0.1:5173" class="button" target="_blank">Open App (127.0.0.1)</a>
+    </div>
+    
+    <div class="card">
+        <h2>API Status</h2>
+        <p>Check if the API is running:</p>
+        <a href="http://localhost:3001/api/status" class="button" target="_blank">Check API Status</a>
+        <a href="http://localhost:3000/api/status" class="button" target="_blank">Check Direct API Status</a>
+    </div>
+    
+    <div class="card">
+        <h2>Troubleshooting</h2>
+        <p>If you're having trouble accessing the application:</p>
+        <ol>
+            <li>Make sure the Vite server is running (npm run client)</li>
+            <li>Make sure the API server is running (./start-server.sh)</li>
+            <li>Make sure the proxy server is running (node simple-proxy.js)</li>
+            <li>Try clearing your browser cache or using an incognito window</li>
+        </ol>
+    </div>
+</body>
+</html>

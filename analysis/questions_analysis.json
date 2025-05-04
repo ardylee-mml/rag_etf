@@ -1,0 +1,347 @@
+{
+  "collectionName": "questions",
+  "count": 56,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "userId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "text": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "choices": {
+      "types": [
+        "array"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "arrayElementType": "object",
+      "arrayElementFields": [
+        "text",
+        "_id"
+      ]
+    },
+    "createdAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "updatedAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "userId"
+  ],
+  "samples": [
+    {
+      "_id": "4a96ff52-a277-4c88-89be-fda1f07acc16",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What do you think Amnesty International does to help for refugees?",
+      "choices": [
+        {
+          "text": "Give refugees food",
+          "_id": "f2be7ce1-6f8e-4f07-b4f4-ed621ca5b7d3"
+        },
+        {
+          "text": "Document rights abuses",
+          "notes": "They investigate and expose human rights violations in conflict zones",
+          "_id": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde"
+        },
+        {
+          "text": "Negotiate peace deals",
+          "_id": "cd8afa0a-451c-41d7-8667-9be0d6fd76a1"
+        }
+      ],
+      "createdAt": "2023-11-07T06:44:14.925Z",
+      "updatedAt": "2023-11-07T06:44:14.925Z",
+      "__v": 0,
+      "_correctChoiceId": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde",
+      "_correctChoiceText": "Document rights abuses",
+      "_correctChoiceNotes": "They investigate and expose human rights violations in conflict zones"
+    },
+    {
+      "_id": "0ce7f83b-f654-44cd-88ec-86704283581e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "How can technology help promote rights?",
+      "choices": [
+        {
+          "text": "Encrypted messaging",
+          "_id": "6126d8eb-0c03-495c-b201-dd3fa1beeb91"
+        },
+        {
+          "text": "Satellite images",
+          "_id": "858cbdaf-afe2-4e4c-a489-8e8acd79c0c2"
+        },
+        {
+          "text": "Social media",
+          "notes": "Raising awareness through social campaigns",
+          "_id": "a9180033-59ef-4c42-b9ef-b454a5e40245"
+        }
+      ],
+      "createdAt": "2023-11-07T06:50:42.495Z",
+      "updatedAt": "2023-11-07T06:50:42.495Z",
+      "__v": 0,
+      "_correctChoiceId": "a9180033-59ef-4c42-b9ef-b454a5e40245",
+      "_correctChoiceText": "Social media",
+      "_correctChoiceNotes": "Raising awareness through social campaigns"
+    },
+    {
+      "_id": "d5206421-bebc-483f-9c51-24853fc8076e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What happens to many children in conflicts?",
+      "choices": [
+        {
+          "text": "Become refugees",
+          "_id": "0c94a0f0-40bf-46b4-8578-b7252985692e"
+        },
+        {
+          "text": "Lose family",
+          "_id": "96e748ba-e380-445b-9207-54c30746c45f"
+        },
+        {
+          "text": "Join armed groups",
+          "_id": "4584dc3c-76d2-498d-a8db-a138b402fcf3"
+        },
+        {
+          "text": "All are correct",
+          "_id": "df923b25-376f-4e82-91e6-9bbad6a61d51"
+        }
+      ],
+      "createdAt": "2023-11-07T06:49:19.231Z",
+      "updatedAt": "2023-11-07T06:49:19.231Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    },
+    {
+      "_id": "ea16f43a-ab5a-4a92-8a9b-504bf910cff6",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "What sites are protected in war by law?",
+      "choices": [
+        {
+          "text": "Schools",
+          "_id": "81e9be39-efc9-48bd-be24-952d1dab28b8"
+        },
+        {
+          "text": "Places of worship",
+          "_id": "5f08c4c0-b692-46d6-a7bb-b996eadbd539"
+        },
+        {
+          "text": "Hospitals",
+          "notes": "Hospitals are protected under international humanitarian law",
+          "_id": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c"
+        }
+      ],
+      "createdAt": "2023-11-07T06:46:52.680Z",
+      "updatedAt": "2023-11-07T06:46:52.680Z",
+      "__v": 0,
+      "_correctChoiceId": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c",
+      "_correctChoiceText": "Hospitals",
+      "_correctChoiceNotes": "Hospitals are protected under international humanitarian law"
+    },
+    {
+      "_id": "5bc3e192-f828-4acb-aa5d-a736c46d8676",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "text": "How can people help war victims?",
+      "choices": [
+        {
+          "text": "Send care packages",
+          "_id": "d26c109e-745f-4dbb-a688-443e0656babb"
+        },
+        {
+          "text": "Protest wars",
+          "_id": "565f5aca-1a28-4eaf-8f09-7509a6599d7c"
+        },
+        {
+          "text": "Donate to local and international  NGOs like Amnesty International",
+          "_id": "9e5b5d17-0b7c-402c-962d-aa8af2b8150b"
+        },
+        {
+          "text": "All are correct",
+          "_id": "5a063eea-1cce-4078-9424-c5da5409cec0"
+        }
+      ],
+      "createdAt": "2023-11-07T06:48:35.016Z",
+      "updatedAt": "2023-11-07T06:48:35.016Z",
+      "__v": 0,
+      "_correctChoiceId": null,
+      "_correctChoiceText": null,
+      "_correctChoiceNotes": null
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all questions",
+      "naturalLanguage": "Show me all questions",
+      "mongoQuery": "db.questions.find({})"
+    },
+    {
+      "description": "Find questions by text",
+      "naturalLanguage": "Find questions containing \"history\"",
+      "mongoQuery": "db.questions.find({ text: { $regex: \"history\", $options: \"i\" } })"
+    },
+    {
+      "description": "Count how many times each question has been answered",
+      "naturalLanguage": "How many times has each question been answered?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"question\" } },\n  { $group: { _id: \"$context.questionId\", count: { $sum: 1 } } },\n  { $lookup: { from: \"questions\", localField: \"_id\", foreignField: \"_id\", as: \"questionDetails\" } },\n  { $unwind: { path: \"$questionDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: { questionId: \"$_id\", questionText: \"$questionDetails.text\", count: 1, _id: 0 } },\n  { $sort: { count: -1 } }\n])"
+    },
+    {
+      "description": "Find questions with their correct answers",
+      "naturalLanguage": "Show me all questions with their correct answers",
+      "mongoQuery": "db.questions.aggregate([\n  { $match: {} },\n  { $project: {\n    questionId: \"$_id\",\n    questionText: \"$text\",\n    correctChoice: {\n      $filter: {\n        input: \"$choices\",\n        as: \"choice\",\n        cond: { $ifNull: [\"$$choice.notes\", false] }\n      }\n    },\n    userId: 1\n  }},\n  { $unwind: { path: \"$correctChoice\", preserveNullAndEmptyArrays: true } }\n])"
+    },
+    {
+      "description": "Count wrong first attempts per question",
+      "naturalLanguage": "How many players answered each question wrong on their first attempt?",
+      "mongoQuery": "// This requires custom logic in JavaScript to:\n// 1. Find the correct choice for each question\n// 2. Group events by player and question to identify first attempts\n// 3. Check if first attempts were wrong\n// 4. Count wrong first attempts by question"
+    }
+  ],
+  "correctAnswers": {
+    "4a96ff52-a277-4c88-89be-fda1f07acc16": {
+      "questionId": "4a96ff52-a277-4c88-89be-fda1f07acc16",
+      "questionText": "What do you think Amnesty International does to help for refugees?",
+      "correctChoiceId": "39d3a48d-0fac-4bc8-9dc0-3e4dd0a4afde",
+      "correctChoiceText": "Document rights abuses",
+      "correctChoiceNotes": "They investigate and expose human rights violations in conflict zones",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "0ce7f83b-f654-44cd-88ec-86704283581e": {
+      "questionId": "0ce7f83b-f654-44cd-88ec-86704283581e",
+      "questionText": "How can technology help promote rights?",
+      "correctChoiceId": "a9180033-59ef-4c42-b9ef-b454a5e40245",
+      "correctChoiceText": "Social media",
+      "correctChoiceNotes": "Raising awareness through social campaigns",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "d5206421-bebc-483f-9c51-24853fc8076e": {
+      "questionId": "d5206421-bebc-483f-9c51-24853fc8076e",
+      "questionText": "What happens to many children in conflicts?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "ea16f43a-ab5a-4a92-8a9b-504bf910cff6": {
+      "questionId": "ea16f43a-ab5a-4a92-8a9b-504bf910cff6",
+      "questionText": "What sites are protected in war by law?",
+      "correctChoiceId": "f6340b4a-4dec-4c9e-97ea-a834640c4d5c",
+      "correctChoiceText": "Hospitals",
+      "correctChoiceNotes": "Hospitals are protected under international humanitarian law",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "5bc3e192-f828-4acb-aa5d-a736c46d8676": {
+      "questionId": "5bc3e192-f828-4acb-aa5d-a736c46d8676",
+      "questionText": "How can people help war victims?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "61bf630f-fa8c-4aea-8605-065c5180346e": {
+      "questionId": "61bf630f-fa8c-4aea-8605-065c5180346e",
+      "questionText": "What right is often denied in war?",
+      "correctChoiceId": "820b946c-c347-421f-b1fa-46f7e472f80e",
+      "correctChoiceText": "Fair trial",
+      "correctChoiceNotes": "The right to due process is often violated during conflicts",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "9ff17bd6-9c1b-462b-aaba-ddd75c557d51": {
+      "questionId": "9ff17bd6-9c1b-462b-aaba-ddd75c557d51",
+      "questionText": "How do conflicts impact education?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "54a77d0c-a825-43e3-89ef-6933f541e114": {
+      "questionId": "54a77d0c-a825-43e3-89ef-6933f541e114",
+      "questionText": "How can individuals support human rights?",
+      "correctChoiceId": null,
+      "correctChoiceText": null,
+      "correctChoiceNotes": null,
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "f9f6b8fb-ed43-4f23-b0d4-5cdb2e2f86e1": {
+      "questionId": "f9f6b8fb-ed43-4f23-b0d4-5cdb2e2f86e1",
+      "questionText": "What's the role of NGOs like Amnesty International in conflicts?",
+      "correctChoiceId": "185371d8-add8-4268-8069-d35e5c2bd0fb",
+      "correctChoiceText": "Monitoring abuses",
+      "correctChoiceNotes": "NGOs document and report on rights violations",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "af950993-6b14-4658-88c0-93a71febc2e4": {
+      "questionId": "af950993-6b14-4658-88c0-93a71febc2e4",
+      "questionText": "What's a big challenge for those fleeing conflicts?",
+      "correctChoiceId": "a0f33e48-6f2c-4440-b0bf-ba76cf6f53ce",
+      "correctChoiceText": "Getting visas",
+      "correctChoiceNotes": "Refugees often lack proper documentation to flee safely",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "34a8a1fe-e8fa-4a8b-8759-4bb388c0319e": {
+      "questionId": "34a8a1fe-e8fa-4a8b-8759-4bb388c0319e",
+      "questionText": "What right should civilians have in war?",
+      "correctChoiceId": "031ccae3-58f0-4f25-ab96-3ce1f2abe8e3",
+      "correctChoiceText": "To be safe",
+      "correctChoiceNotes": "Civilians have a right under international law to protection from harm during conflicts",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "0a23047c-3707-47cd-be40-579735fbd4ae": {
+      "questionId": "0a23047c-3707-47cd-be40-579735fbd4ae",
+      "questionText": "What do landmines often threaten?",
+      "correctChoiceId": "66fbc891-6138-412e-92b3-a27f5178eac8",
+      "correctChoiceText": "Civilian safety",
+      "correctChoiceNotes": "Landmines kill and injure many civilians each year",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    },
+    "81862a38-04b5-4579-a74e-14d0f5cd5131": {
+      "questionId": "81862a38-04b5-4579-a74e-14d0f5cd5131",
+      "questionText": "Why promote human rights globally?",
+      "correctChoiceId": "a28c50bf-f6f8-47cb-89e9-3bdf5bf4adb2",
+      "correctChoiceText": "Guarantee the dignity of all",
+      "correctChoiceNotes": "Promoting human rights helps ensure the protection of human dignity",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169"
+    }
+  }
+}

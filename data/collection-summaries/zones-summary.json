@@ -1,0 +1,664 @@
+{
+  "collectionName": "zones",
+  "description": "Contains information about game zones or areas that players can visit.",
+  "documentCount": 65,
+  "idType": "UUID",
+  "keyFields": [
+    "_id",
+    "name"
+  ],
+  "fields": [
+    {
+      "path": "_id",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "userId.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "name",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "description",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "createdAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "updatedAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    }
+  ],
+  "outgoingRelationships": [],
+  "incomingRelationships": [],
+  "sampleDocuments": [
+    {
+      "_id": "51e65b69-9d0b-47cb-b9e3-f8ebb6f4edb6",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S1-R1-LivRm",
+      "description": "Room 1 Livingroom in Stage 1",
+      "createdAt": "2023-10-31T21:56:54.683Z",
+      "updatedAt": "2023-10-31T21:56:54.683Z",
+      "__v": 0
+    },
+    {
+      "_id": "aa449333-ebda-4c1d-a370-8c533d3d00eb",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S2-AITC1",
+      "description": "Amnesty International Treasure Chest (AITC) 1 in Stage 2",
+      "createdAt": "2023-11-02T04:29:14.703Z",
+      "updatedAt": "2023-11-02T04:29:14.703Z",
+      "__v": 0
+    },
+    {
+      "_id": "0e6f4851-f6a9-49a6-a321-f4c2a4efe1da",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S3-Stick",
+      "description": "All Sticks in Stage 3",
+      "createdAt": "2023-12-01T18:25:22.559Z",
+      "updatedAt": "2023-12-01T18:25:22.559Z",
+      "__v": 0
+    }
+  ],
+  "exampleQueries": [
+    {
+      "description": "Find most visited zones",
+      "question": "Which zones have been visited the most?",
+      "pipeline": [
+        {
+          "$lookup": {
+            "from": "events",
+            "localField": "_id",
+            "foreignField": "context.zoneId",
+            "as": "visits"
+          }
+        },
+        {
+          "$project": {
+            "_id": 1,
+            "name": 1,
+            "visitCount": {
+              "$size": "$visits"
+            }
+          }
+        },
+        {
+          "$sort": {
+            "visitCount": -1
+          }
+        },
+        {
+          "$limit": 10
+        }
+      ]
+    },
+    {
+      "description": "Count total documents",
+      "question": "How many documents are in the zones collection?",
+      "pipeline": [
+        {
+          "$count": "total"
+        }
+      ]
+    }
+  ]
+}

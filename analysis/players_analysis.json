@@ -1,0 +1,156 @@
+{
+  "collectionName": "players",
+  "count": 304814,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "playerId": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "createdAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "language": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "name": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "region": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "updatedAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "discordConnectId": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 1,
+      "percentPresent": 20
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "playerId",
+    "discordConnectId"
+  ],
+  "samples": [
+    {
+      "_id": "ac6b39a8-91d1-4eea-8c76-c160e1995824",
+      "playerId": 902961137,
+      "__v": 0,
+      "createdAt": "2023-12-09T00:47:16.594Z",
+      "language": "en-us",
+      "name": "aaaaaaboiii",
+      "region": "CA",
+      "updatedAt": "2023-12-09T00:47:16.594Z"
+    },
+    {
+      "_id": "4eadf577-27fd-412f-8869-d0ee942e9bb5",
+      "playerId": 1142396048,
+      "__v": 0,
+      "createdAt": "2023-12-05T17:46:24.189Z",
+      "language": "en-us",
+      "name": "Franklin_Surten",
+      "region": "CZ",
+      "updatedAt": "2024-05-17T18:54:44.178Z"
+    },
+    {
+      "_id": "baa7cbaf-593c-4a48-885c-8a3e6be5ad53",
+      "playerId": 4257858378,
+      "__v": 0,
+      "createdAt": "2023-12-15T14:08:38.683Z",
+      "language": "es-es",
+      "name": "imbrchasing",
+      "region": "AR",
+      "updatedAt": "2024-10-28T19:41:34.342Z"
+    },
+    {
+      "_id": "bc3d1aa7-731f-4c39-9900-e2ccddc20f30",
+      "playerId": 4232557415,
+      "__v": 0,
+      "createdAt": "2023-12-15T17:02:43.298Z",
+      "language": "es-es",
+      "name": "wonderleita",
+      "region": "AR",
+      "updatedAt": "2025-03-19T19:31:16.498Z"
+    },
+    {
+      "_id": "52465337-687b-4643-929b-90fa6499b3c9",
+      "playerId": 858221004,
+      "__v": 0,
+      "createdAt": "2024-01-13T08:54:42.925Z",
+      "language": "en-us",
+      "name": "jakeyboper123",
+      "region": "GB",
+      "updatedAt": "2024-01-27T08:21:51.187Z",
+      "discordConnectId": "1031608694720450581"
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all players",
+      "naturalLanguage": "Show me all players",
+      "mongoQuery": "db.players.find({})"
+    },
+    {
+      "description": "Find players by name",
+      "naturalLanguage": "Find players with \"john\" in their name",
+      "mongoQuery": "db.players.find({ name: { $regex: \"john\", $options: \"i\" } })"
+    },
+    {
+      "description": "Find all events for a specific player",
+      "naturalLanguage": "Show me all events for player X",
+      "mongoQuery": "db.events.find({ playerId: \"<player_id>\" })"
+    },
+    {
+      "description": "Count events by type for a player",
+      "naturalLanguage": "How many events of each type does player X have?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { playerId: \"<player_id>\" } },\n  { $group: { _id: \"$type\", count: { $sum: 1 } } },\n  { $sort: { count: -1 } }\n])"
+    }
+  ]
+}

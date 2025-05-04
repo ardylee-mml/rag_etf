@@ -1,0 +1,169 @@
+{
+  "collectionName": "items",
+  "count": 100,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "userId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "applicationId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "name": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "description": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "tags": {
+      "types": [
+        "array"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "arrayElementType": "string"
+    },
+    "createdAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "updatedAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "userId",
+    "applicationId"
+  ],
+  "samples": [
+    {
+      "_id": "467f7a33-8794-494e-8507-0b1942262a41",
+      "userId": "23a2d529-7dc4-47d3-a724-a0f2b6e6d3b2",
+      "applicationId": "7f061922-b09f-437b-b4c5-b0b681f6461b",
+      "name": "1st item",
+      "description": "the 1st item description",
+      "tags": [
+        "health",
+        "hunger"
+      ],
+      "createdAt": "2023-10-31T21:21:45.779Z",
+      "updatedAt": "2023-10-31T21:21:45.779Z",
+      "__v": 0
+    },
+    {
+      "_id": "0da6af7f-73cf-483b-a9d4-fa988510af9a",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "Jumping Boots",
+      "description": "Golden boots - In-game purchase",
+      "tags": [],
+      "createdAt": "2023-10-31T22:02:42.609Z",
+      "updatedAt": "2023-10-31T22:02:42.609Z",
+      "__v": 0
+    },
+    {
+      "_id": "735c3f4b-2966-401d-99b0-c1ce706e001e",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "Water",
+      "description": "Regular water to reduce hunger",
+      "tags": [],
+      "createdAt": "2023-10-31T22:02:34.971Z",
+      "updatedAt": "2023-10-31T22:02:34.971Z",
+      "__v": 0
+    },
+    {
+      "_id": "445c6338-9ddd-47f1-8959-a5d26eb289fa",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "DoorAtHallway-Rm405",
+      "description": "Room 405 door at the hallway",
+      "tags": [],
+      "createdAt": "2023-10-31T22:03:45.594Z",
+      "updatedAt": "2023-10-31T22:03:45.594Z",
+      "__v": 0
+    },
+    {
+      "_id": "511071c2-f9f2-43f3-b599-c712f53dac66",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "Sunglasses",
+      "description": "Regular Sun glasses",
+      "tags": [],
+      "createdAt": "2023-10-31T22:01:01.507Z",
+      "updatedAt": "2023-10-31T22:01:01.507Z",
+      "__v": 0
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all items",
+      "naturalLanguage": "Show me all items",
+      "mongoQuery": "db.items.find({})"
+    },
+    {
+      "description": "Find items by name",
+      "naturalLanguage": "Find items with \"key\" in their name",
+      "mongoQuery": "db.items.find({ name: { $regex: \"key\", $options: \"i\" } })"
+    },
+    {
+      "description": "Count items collected by players",
+      "naturalLanguage": "How many times has each item been collected?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"item\" } },\n  { $group: { _id: \"$context.itemId\", count: { $sum: 1 } } },\n  { $lookup: { from: \"items\", localField: \"_id\", foreignField: \"_id\", as: \"itemDetails\" } },\n  { $unwind: { path: \"$itemDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: { itemId: \"$_id\", itemName: \"$itemDetails.name\", count: 1, _id: 0 } },\n  { $sort: { count: -1 } }\n])"
+    }
+  ]
+}

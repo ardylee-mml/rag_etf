@@ -1,0 +1,658 @@
+{
+  "collectionName": "leaderboards",
+  "description": "Contains player scores, levels, and rankings.",
+  "documentCount": 141349,
+  "idType": "UUID",
+  "keyFields": [
+    "_id",
+    "playerId",
+    "playerName",
+    "score"
+  ],
+  "fields": [
+    {
+      "path": "_id",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "Unique identifier for the leaderboard entry"
+    },
+    {
+      "path": "_id.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "_id.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId",
+      "types": [
+        "UUID"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.sub_type",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer",
+      "types": [
+        "Buffer"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.0",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.1",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.2",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.3",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.4",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.5",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.6",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.7",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.8",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.9",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.10",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.11",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.12",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.13",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.14",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.buffer.15",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "applicationId.position",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "name",
+      "types": [
+        "string"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "playerId",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": "ID of the player"
+    },
+    {
+      "path": "amount",
+      "types": [
+        "number"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "createdAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "updatedAt",
+      "types": [
+        "Date"
+      ],
+      "frequency": 1,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context",
+      "types": [
+        "Object"
+      ],
+      "frequency": 0.866,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.sessionId",
+      "types": [
+        "string"
+      ],
+      "frequency": 0.664,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown",
+      "types": [
+        "Object"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.educationalMoment",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.chests",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.stamina",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.health",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.hunger",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.time",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.86,
+      "isArray": false,
+      "description": null
+    },
+    {
+      "path": "context.breakdown.bonusGame",
+      "types": [
+        "number"
+      ],
+      "frequency": 0.006,
+      "isArray": false,
+      "description": null
+    }
+  ],
+  "outgoingRelationships": [
+    {
+      "sourceField": "playerId",
+      "targetCollection": "players",
+      "targetField": "playerId",
+      "matchCount": 30,
+      "confidence": 0.6
+    }
+  ],
+  "incomingRelationships": [],
+  "sampleDocuments": [
+    {
+      "_id": "ff7707f3-0f43-44a1-be49-59312ca4f708",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 158195484,
+      "__v": 0,
+      "amount": 2028,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    },
+    {
+      "_id": "c1db1504-47a5-407e-93b1-d0f9f97684ee",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 1198057697,
+      "__v": 0,
+      "amount": 1641,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    },
+    {
+      "_id": "2a9f96d9-cbf9-4bf0-b4f6-be28d60d130c",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "stage-1",
+      "playerId": 5320561796,
+      "__v": 0,
+      "amount": 1599,
+      "createdAt": "2024-01-05T14:31:46.568Z",
+      "updatedAt": "2024-01-05T15:25:18.219Z"
+    }
+  ],
+  "exampleQueries": [
+    {
+      "description": "Find top players by score",
+      "question": "Who are the top 10 players by score?",
+      "pipeline": [
+        {
+          "$sort": {
+            "score": -1
+          }
+        },
+        {
+          "$limit": 10
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "playerName": 1,
+            "score": 1,
+            "level": 1
+          }
+        }
+      ]
+    },
+    {
+      "description": "Calculate average player score",
+      "question": "What is the average player score?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": null,
+            "averageScore": {
+              "$avg": "$score"
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "averageScore": 1
+          }
+        }
+      ]
+    },
+    {
+      "description": "Get score statistics",
+      "question": "What are the minimum, maximum, and average scores?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": null,
+            "minScore": {
+              "$min": "$score"
+            },
+            "maxScore": {
+              "$max": "$score"
+            },
+            "avgScore": {
+              "$avg": "$score"
+            },
+            "totalPlayers": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0
+          }
+        }
+      ]
+    },
+    {
+      "description": "Group players by level",
+      "question": "How many players are at each level?",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": "$level",
+            "count": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "_id": 1
+          }
+        },
+        {
+          "$project": {
+            "level": "$_id",
+            "count": 1,
+            "_id": 0
+          }
+        }
+      ]
+    },
+    {
+      "description": "Count total documents",
+      "question": "How many documents are in the leaderboards collection?",
+      "pipeline": [
+        {
+          "$count": "total"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q1",
+    "text": "What is the average number of attempts per question?",
+    "collections": ["events", "questions"],
+    "intent": "analysis",
+    "category": "performance",
+    "queryPattern": "avg_attempts_per_question",
+    "execution": {
+      "success": true,
+      "executionTime": 120,
+      "resultCount": 15
+    }
+  },
+  {
+    "id": "q2",
+    "text": "How many players signed in each day?",
+    "collections": ["players", "events"],
+    "intent": "analysis",
+    "category": "engagement",
+    "queryPattern": "player_activity",
+    "execution": {
+      "success": true,
+      "executionTime": 85,
+      "resultCount": 30
+    }
+  }
+]

@@ -1,0 +1,43 @@
+// Get self-learning relationships
+router.get('/self-learning/relationships', async (req, res) => {
+    try {
+        if (!selfLearningService.initialized) {
+            await selfLearningService.initialize();
+        }
+
+        let relationships = selfLearningService.getAllRelationships();
+        
+        // Add default relationships if none are found
+        if (!relationships || relationships.length === 0) {
+            console.log('No relationships found, returning default relationships');
+            relationships = [
+                {
+                    source: { collection: 'players', field: '_id' },
+                    target: { collection: 'events', field: 'playerId' },
+                    description: 'Players to Events relationship',
+                    confidence: 0.95
+                },
+                {
+                    source: { collection: 'events', field: 'context.questionId' },
+                    target: { collection: 'questions', field: '_id' },
+                    description: 'Events to Questions relationship',
+                    confidence: 0.9
+                },
+                {
+                    source: { collection: 'events', field: 'context.zoneId' },
+                    target: { collection: 'zones', field: '_id' },
+                    description: 'Events to Zones relationship',
+                    confidence: 0.85
+                }
+            ];
+        }
+        
+        res.json(relationships);
+    } catch (error) {
+        console.error('Error getting relationships:', error);
+        res.status(500).json({
+            error: 'Error getting relationships',
+            message: error.message
+        });
+    }
+});

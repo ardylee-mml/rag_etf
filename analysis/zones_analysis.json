@@ -1,0 +1,153 @@
+{
+  "collectionName": "zones",
+  "count": 65,
+  "fieldAnalysis": {
+    "_id": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "userId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "applicationId": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": [
+        "sub_type",
+        "buffer",
+        "position"
+      ]
+    },
+    "name": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "description": {
+      "types": [
+        "string"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    },
+    "createdAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "updatedAt": {
+      "types": [
+        "object"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100,
+      "nestedFields": []
+    },
+    "__v": {
+      "types": [
+        "number"
+      ],
+      "presentInSamples": 5,
+      "percentPresent": 100
+    }
+  },
+  "relationshipFields": [
+    "_id",
+    "userId",
+    "applicationId"
+  ],
+  "samples": [
+    {
+      "_id": "51e65b69-9d0b-47cb-b9e3-f8ebb6f4edb6",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S1-R1-LivRm",
+      "description": "Room 1 Livingroom in Stage 1",
+      "createdAt": "2023-10-31T21:56:54.683Z",
+      "updatedAt": "2023-10-31T21:56:54.683Z",
+      "__v": 0
+    },
+    {
+      "_id": "aa449333-ebda-4c1d-a370-8c533d3d00eb",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S2-AITC1",
+      "description": "Amnesty International Treasure Chest (AITC) 1 in Stage 2",
+      "createdAt": "2023-11-02T04:29:14.703Z",
+      "updatedAt": "2023-11-02T04:29:14.703Z",
+      "__v": 0
+    },
+    {
+      "_id": "0e6f4851-f6a9-49a6-a321-f4c2a4efe1da",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S3-Stick",
+      "description": "All Sticks in Stage 3",
+      "createdAt": "2023-12-01T18:25:22.559Z",
+      "updatedAt": "2023-12-01T18:25:22.559Z",
+      "__v": 0
+    },
+    {
+      "_id": "61791967-0694-4cb4-8e5d-b2126c26e570",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S1-Gfloor",
+      "description": "Ground floor in Stage 1",
+      "createdAt": "2023-10-31T21:57:45.387Z",
+      "updatedAt": "2023-10-31T21:57:45.387Z",
+      "__v": 0
+    },
+    {
+      "_id": "b2db68ec-99c5-46e4-bae2-a323d300d81f",
+      "userId": "e9ccd5c4-0aea-4b38-b4e7-6a03c6f05169",
+      "applicationId": "ff493b3b-801f-4597-85a0-e7acdf731017",
+      "name": "S1-R1-BthRm",
+      "description": "Room 1 Bathroom in Stage 1",
+      "createdAt": "2023-10-31T21:57:18.953Z",
+      "updatedAt": "2023-10-31T21:57:18.953Z",
+      "__v": 0
+    }
+  ],
+  "queries": [
+    {
+      "description": "Find all zones",
+      "naturalLanguage": "Show me all zones",
+      "mongoQuery": "db.zones.find({})"
+    },
+    {
+      "description": "Find zones by name",
+      "naturalLanguage": "Find zones with \"forest\" in their name",
+      "mongoQuery": "db.zones.find({ name: { $regex: \"forest\", $options: \"i\" } })"
+    },
+    {
+      "description": "Count zone entries",
+      "naturalLanguage": "How many times has each zone been entered?",
+      "mongoQuery": "db.events.aggregate([\n  { $match: { type: \"zone\" } },\n  { $group: { _id: \"$context.zoneId\", count: { $sum: 1 } } },\n  { $lookup: { from: \"zones\", localField: \"_id\", foreignField: \"_id\", as: \"zoneDetails\" } },\n  { $unwind: { path: \"$zoneDetails\", preserveNullAndEmptyArrays: true } },\n  { $project: { zoneId: \"$_id\", zoneName: \"$zoneDetails.name\", count: 1, _id: 0 } },\n  { $sort: { count: -1 } }\n])"
+    }
+  ]
+}
