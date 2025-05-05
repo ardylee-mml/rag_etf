@@ -1,82 +1,58 @@
-# MongoDB RAG API
+# MongoDB RAG System
 
-A Node.js API that connects to MongoDB and accepts natural language queries, featuring JWT authentication and rate limiting.
+This repository contains a MongoDB RAG (Retrieval-Augmented Generation) system that uses natural language queries to generate MongoDB aggregation pipelines.
 
-## Features
+## Important Security Note
 
-- Express.js REST API
-- MongoDB integration
-- JWT authentication
-- Rate limiting (5 requests per minute)
-- Error handling for database connection failures
-- CORS enabled
+This repository contains several server files with hardcoded MongoDB connection strings. These files are for demonstration purposes only and should not be used in production.
+
+Before using this code in production:
+
+1. Remove all hardcoded MongoDB connection strings from the code
+2. Use environment variables for all sensitive information
+3. Create a proper .env file with your own MongoDB connection string
+4. Make sure the .env file is in .gitignore
 
 ## Setup
 
-1. Install dependencies:
-```bash
-npm install
-```
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Create a .env file with the following variables:
+   ```
+   MONGODB_URI=your_mongodb_connection_string
+   DEEPSEEK_API_KEY=your_deepseek_api_key
+   JWT_SECRET=your_jwt_secret
+   ```
+4. Start the server: `node server.js`
+5. Start the frontend: `npm run dev`
 
-2. Create a `.env` file:
-```bash
-cp .env.example .env
-```
+## Features
 
-3. Configure your environment variables in `.env`:
-- `PORT`: API server port
-- `MONGODB_URI`: MongoDB connection string
-- `JWT_SECRET`: Secret key for JWT token generation
-- `JWT_EXPIRES_IN`: JWT token expiration time
+- Natural language query to MongoDB aggregation pipeline conversion
+- Specialized handlers for common query patterns
+- Interactive query interface
+- Relationship mapping between collections
+- Self-learning system for query pattern generation
 
-4. Start the server:
-```bash
-# Development mode
-npm run dev
+## Demo Queries
 
-# Production mode
-npm start
-```
+Here are some example queries you can try:
 
-## API Endpoints
+1. Item Interaction Query:
+   ```
+   List the top 5 items where type = "item" and context.action = "pickup"
+   ```
 
-### POST /api/query
-Process a natural language query.
+2. Player Activity Query:
+   ```
+   How many players played more than 3 times in total?
+   ```
 
-**Headers:**
-- `Authorization: Bearer <your_jwt_token>`
-- `Content-Type: application/json`
+3. Zone Engagement Query:
+   ```
+   Which zones have the highest player engagement and what items were picked up in those zones?
+   ```
 
-**Request Body:**
-```json
-{
-    "query": "Your natural language query here"
-}
-```
+## License
 
-**Response:**
-```json
-{
-    "query": "Your query",
-    "timestamp": "2024-01-01T00:00:00.000Z",
-    "status": "processed"
-}
-```
-
-## Rate Limiting
-
-The API is limited to 5 requests per minute per IP address.
-
-## Error Handling
-
-The API includes comprehensive error handling for:
-- Database connection failures
-- Authentication errors
-- Rate limiting
-- Invalid requests
-
-## Security
-
-- JWT authentication required for all query endpoints
-- Rate limiting to prevent abuse
-- CORS enabled for secure cross-origin requests 
+MIT
