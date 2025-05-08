@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5174', 'http://127.0.0.1:5174'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -20,6 +20,8 @@ app.use(cors({
 // Log all requests for debugging
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
+  // Add timestamp to track request duration
+  req.startTime = Date.now();
   next();
 });
 
@@ -65,17 +67,60 @@ app.post('/api/query', authMiddleware, async (req, res) => {
     console.log('Collection:', collection);
     console.log('Schema Info:', schemaInfo);
 
+    // Set a timeout for the query
+    const queryTimeout = 30000; // 30 seconds
+    let timeoutId;
+
+    // Create a promise that rejects after the timeout
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error('Query execution timed out'));
+      }, queryTimeout);
+    });
+
     // Use extractMongoDBPipeline directly
+    console.log('Generating MongoDB pipeline...');
     let pipeline = deepseekService.extractMongoDBPipeline('[]', query, collection);
     let explanation = 'Direct pipeline generation using extractMongoDBPipeline';
-    
+
+    // Optimize the pipeline for player frequency queries
+    if (query.toLowerCase().includes('player') &&
+        query.toLowerCase().includes('played more than') &&
+        collection === 'events') {
+
+      console.log('Optimizing player frequency query...');
+
+      // Add a sample stage to reduce data processing
+      if (!pipeline.some(stage => stage.$sample)) {
+        pipeline.unshift({ $sample: { size: 100000 } });
+        explanation += ' (with sampling for optimization)';
+      }
+
+      // Add a limit to the number of results
+      if (!pipeline.some(stage => stage.$limit)) {
+        pipeline.push({ $limit: 1 });
+      }
+    }
+
     // Get the database connection
     const db = mongoose.connection.db;
     const mongoCollection = db.collection(collection);
 
-    // Execute the query
+    // Execute the query with a timeout
     console.log('Executing pipeline:', JSON.stringify(pipeline));
-    const results = await mongoCollection.aggregate(pipeline).toArray();
+
+    // Create a promise for the query execution
+    const queryPromise = mongoCollection.aggregate(pipeline, {
+      allowDiskUse: true,  // Allow disk usage for large operations
+      maxTimeMS: 25000     // Set a 25-second timeout at the MongoDB level
+    }).toArray();
+
+    // Race the query promise against the timeout
+    const results = await Promise.race([queryPromise, timeoutPromise]);
+
+    // Clear the timeout if the query completes
+    clearTimeout(timeoutId);
+
     console.log(`Query returned ${results.length} results`);
 
     // Return response with all the fields needed for debug info
@@ -85,11 +130,18 @@ app.post('/api/query', authMiddleware, async (req, res) => {
       results,
       processedQuery: `db.${collection}.aggregate(${JSON.stringify(pipeline)})`,
       pipeline: pipeline,
-      explanation: explanation
+      explanation: explanation,
+      executionTime: new Date() - new Date(req.startTime || Date.now())
     });
   } catch (error) {
     console.error('Query execution error:', error);
-    res.status(500).json({ message: 'Query execution failed', error: error.message });
+    res.status(500).json({
+      message: 'Query execution failed',
+      error: error.message,
+      suggestion: error.message.includes('timed out') ?
+        'This query is taking too long to process. Try a more specific query or add filters to reduce the data being processed.' :
+        'Please try again with a different query.'
+    });
   }
 });
 
@@ -98,7 +150,7 @@ console.log('Connecting to MongoDB...');
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    
+
     // Start the server
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

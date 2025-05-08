@@ -91,12 +91,17 @@ function QueryInterface({ token, collections }) {
       setProgress(10);
       setProgressStage('Initializing query...');
 
-      // Simulate progress updates for better UX
+      // Simulate progress updates for better UX with more detailed stages
       const progressIntervals = [
-        { progress: 25, stage: 'Analyzing query...', delay: 500 },
-        { progress: 40, stage: 'Generating MongoDB pipeline...', delay: 1000 },
-        { progress: 60, stage: 'Executing query...', delay: 1500 },
-        { progress: 80, stage: 'Processing results...', delay: 2000 }
+        { progress: 20, stage: 'Analyzing query structure...', delay: 500 },
+        { progress: 30, stage: 'Identifying query patterns...', delay: 1000 },
+        { progress: 40, stage: 'Generating MongoDB pipeline...', delay: 2000 },
+        { progress: 50, stage: 'Optimizing query for performance...', delay: 3000 },
+        { progress: 60, stage: 'Executing query on database...', delay: 5000 },
+        { progress: 65, stage: 'Processing large dataset...', delay: 10000 },
+        { progress: 70, stage: 'Continuing to process data...', delay: 15000 },
+        { progress: 75, stage: 'Query still running (this may take a while)...', delay: 20000 },
+        { progress: 80, stage: 'Finalizing results...', delay: 25000 }
       ];
 
       // Set up the progress intervals
@@ -204,7 +209,21 @@ function QueryInterface({ token, collections }) {
       }, 500);
     } catch (err) {
       console.error('Query error:', err);
-      setError('Query failed: ' + (err.response?.data?.message || err.message));
+
+      // Enhanced error message with suggestion if available
+      let errorMessage = 'Query failed: ' + (err.response?.data?.message || err.message);
+
+      // Add suggestion if available
+      if (err.response?.data?.suggestion) {
+        errorMessage += '\n\nSuggestion: ' + err.response.data.suggestion;
+      }
+
+      // Add timeout specific message
+      if (err.message.includes('timeout') || (err.response?.data?.error || '').includes('timeout')) {
+        errorMessage += '\n\nThe query timed out. Try a more specific query or add filters to reduce the data being processed.';
+      }
+
+      setError(errorMessage);
       setResults([]);
       setQueryDebugInfo(null);
       setLoading(false);
