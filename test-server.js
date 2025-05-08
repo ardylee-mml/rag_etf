@@ -78,27 +78,68 @@ app.post('/api/query', authMiddleware, async (req, res) => {
       }, queryTimeout);
     });
 
-    // Use extractMongoDBPipeline directly
-    console.log('Generating MongoDB pipeline...');
-    let pipeline = deepseekService.extractMongoDBPipeline('[]', query, collection);
-    let explanation = 'Direct pipeline generation using extractMongoDBPipeline';
+    // Check if this is a player frequency query
+    const lowerQuery = query.toLowerCase();
+    const isPlayerFrequencyQuery = lowerQuery.includes('player') &&
+                                  (lowerQuery.includes('played more than') || lowerQuery.includes('play more than')) &&
+                                  collection === 'events';
 
-    // Optimize the pipeline for player frequency queries
-    if (query.toLowerCase().includes('player') &&
-        query.toLowerCase().includes('played more than') &&
-        collection === 'events') {
+    let pipeline;
+    let explanation;
 
-      console.log('Optimizing player frequency query...');
+    if (isPlayerFrequencyQuery) {
+      console.log('Detected player frequency query, using specialized pipeline...');
 
-      // Add a sample stage to reduce data processing
-      if (!pipeline.some(stage => stage.$sample)) {
-        pipeline.unshift({ $sample: { size: 100000 } });
-        explanation += ' (with sampling for optimization)';
+      // Extract the threshold from the query
+      let threshold = 3; // Default threshold
+      const thresholdMatch = lowerQuery.match(/more than (\d+)/);
+      if (thresholdMatch && thresholdMatch[1]) {
+          threshold = parseInt(thresholdMatch[1]);
       }
 
-      // Add a limit to the number of results
-      if (!pipeline.some(stage => stage.$limit)) {
-        pipeline.push({ $limit: 1 });
+      console.log(`Using threshold: ${threshold} for player frequency query`);
+
+      // Use a specialized pipeline for player frequency queries
+      pipeline = [
+        // Sample to improve performance
+        { $sample: { size: 100000 } },
+
+        // Group events by player to count how many times each player played
+        {
+          $group: {
+            _id: "$playerId",
+            playCount: { $sum: 1 }
+          }
+        },
+
+        // Filter to only include players who played more than threshold times
+        {
+          $match: {
+            playCount: { $gt: threshold }
+          }
+        },
+
+        // Count the number of players who meet the criteria
+        {
+          $count: "playersPlayedMoreThanThreshold"
+        }
+      ];
+
+      explanation = `Specialized pipeline for player frequency query with threshold ${threshold}`;
+    } else {
+      // Use extractMongoDBPipeline for other queries
+      console.log('Generating MongoDB pipeline...');
+      pipeline = deepseekService.extractMongoDBPipeline('[]', query, collection);
+      explanation = 'Direct pipeline generation using extractMongoDBPipeline';
+
+      // Add sampling for performance if needed
+      if (pipeline.length === 0 || (pipeline.length === 1 && Object.keys(pipeline[0]).length === 0)) {
+        console.log('Empty pipeline detected, using fallback...');
+        pipeline = [
+          { $match: {} },
+          { $limit: 20 }
+        ];
+        explanation = 'Fallback pipeline due to empty LLM response';
       }
     }
 
