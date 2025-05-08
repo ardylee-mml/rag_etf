@@ -39,18 +39,18 @@ class DeepSeekService {
         try {
             console.log('Extracting MongoDB pipeline from LLM response...');
             console.log('Response content preview:', content.substring(0, 100) + '...');
-            
+
             // Special case for item queries with context.action filtering
             const lowerQuery = query.toLowerCase();
-            
+
             // Handle specific item query patterns
             if (lowerQuery.includes('item') && collectionName === 'events') {
                 console.log('Detected item-related query');
-                
+
                 // Check for specific item query patterns
                 if (lowerQuery.includes('top') && lowerQuery.includes('pickup')) {
                     console.log('Detected top items pickup query');
-                    
+
                     // Extract limit from query (default to 5 if not specified)
                     let limit = 5;
                     const limitMatch = lowerQuery.match(/top\s+(\d+)/);
@@ -58,9 +58,9 @@ class DeepSeekService {
                         limit = parseInt(limitMatch[1]);
                     }
                     console.log(`Using limit: ${limit}`);
-                    
+
                     return [
-                        { $match: { 
+                        { $match: {
                             type: 'item',
                             'context.action': 'pickup'
                         }},
@@ -85,34 +85,34 @@ class DeepSeekService {
                         { $limit: limit }
                     ];
                 }
-                
+
                 // Check for context.action filtering
-                if (lowerQuery.includes('action') || 
-                    lowerQuery.includes('pickup') || 
-                    lowerQuery.includes('drop') || 
+                if (lowerQuery.includes('action') ||
+                    lowerQuery.includes('pickup') ||
+                    lowerQuery.includes('drop') ||
                     lowerQuery.includes('use')) {
-                    
+
                     console.log('Detected item query with action filtering');
-                    
+
                     // Determine the action type
                     let action = null;
                     if (lowerQuery.includes('pickup')) action = 'pickup';
                     else if (lowerQuery.includes('drop')) action = 'drop';
                     else if (lowerQuery.includes('use')) action = 'use';
-                    
+
                     // Build the match condition
                     const matchCondition = { type: 'item' };
                     if (action) {
                         matchCondition['context.action'] = action;
                     }
-                    
+
                     // Extract limit from query (default to all if not specified)
                     let limit = null;
                     const limitMatch = lowerQuery.match(/top\s+(\d+)/);
                     if (limitMatch) {
                         limit = parseInt(limitMatch[1]);
                     }
-                    
+
                     const pipeline = [
                         { $match: matchCondition },
                         { $group: {
@@ -134,12 +134,12 @@ class DeepSeekService {
                         }},
                         { $sort: { count: -1 } }
                     ];
-                    
+
                     // Add limit if specified
                     if (limit) {
                         pipeline.push({ $limit: limit });
                     }
-                    
+
                     return pipeline;
                 }
             }
@@ -289,7 +289,169 @@ class DeepSeekService {
         }
     }
 
-    // ... [rest of the class remains unchanged] ...
+    // Check if a query contains date references
+    hasDateReference(query) {
+        const dateKeywords = [
+            'today', 'yesterday', 'last week', 'this week', 'last month', 'this month',
+            'last year', 'this year', 'day', 'week', 'month', 'year', 'date', 'time',
+            'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august',
+            'september', 'october', 'november', 'december', 'jan', 'feb', 'mar', 'apr',
+            'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
+        ];
+
+        return dateKeywords.some(keyword => query.includes(keyword));
+    }
+
+    // Check if a pipeline already has a date filter
+    pipelineHasDateFilter(pipeline) {
+        if (!Array.isArray(pipeline) || pipeline.length === 0) {
+            return false;
+        }
+
+        // Look for date-related fields in match stages
+        return pipeline.some(stage => {
+            if (stage.$match) {
+                const matchKeys = Object.keys(stage.$match);
+                return matchKeys.some(key =>
+                    key === 'time' ||
+                    key === 'date' ||
+                    key.includes('time') ||
+                    key.includes('date') ||
+                    (stage.$match[key] && typeof stage.$match[key] === 'object' &&
+                     (Object.keys(stage.$match[key]).some(op => op === '$gte' || op === '$lte' || op === '$gt' || op === '$lt')))
+                );
+            }
+            return false;
+        });
+    }
+
+    // Extract date filter from a query
+    extractDateFilter(query) {
+        // This is a simplified implementation
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        if (query.includes('today')) {
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            return {
+                time: {
+                    $gte: today,
+                    $lt: tomorrow
+                }
+            };
+        } else if (query.includes('yesterday')) {
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            return {
+                time: {
+                    $gte: yesterday,
+                    $lt: today
+                }
+            };
+        } else if (query.includes('this week')) {
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay()); // Start of week (Sunday)
+
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+            return {
+                time: {
+                    $gte: startOfWeek,
+                    $lt: endOfWeek
+                }
+            };
+        } else if (query.includes('last week')) {
+            const startOfLastWeek = new Date(today);
+            startOfLastWeek.setDate(today.getDate() - today.getDay() - 7);
+
+            const endOfLastWeek = new Date(startOfLastWeek);
+            endOfLastWeek.setDate(startOfLastWeek.getDate() + 7);
+
+            return {
+                time: {
+                    $gte: startOfLastWeek,
+                    $lt: endOfLastWeek
+                }
+            };
+        }
+
+        // Default to no filter if no specific date reference is found
+        return null;
+    }
+
+    // Generate a fallback pipeline when LLM response parsing fails
+    generateFallbackPipeline(query, collectionName) {
+        console.log('Generating fallback pipeline for query:', query);
+        const lowerQuery = query.toLowerCase();
+
+        // Special case for player frequency query
+        if (lowerQuery.includes('player') &&
+            (lowerQuery.includes('played more than') || lowerQuery.includes('play more than')) &&
+            collectionName === 'events') {
+
+            // Extract the threshold from the query
+            let threshold = 3; // Default threshold
+            const thresholdMatch = lowerQuery.match(/more than (\d+)/);
+            if (thresholdMatch && thresholdMatch[1]) {
+                threshold = parseInt(thresholdMatch[1]);
+            }
+
+            console.log(`Using threshold: ${threshold} for player frequency query`);
+
+            return [
+                // Group events by player to count how many times each player played
+                {
+                    $group: {
+                        _id: "$playerId",
+                        playCount: { $sum: 1 }
+                    }
+                },
+
+                // Add a field to identify players who played more than threshold times
+                {
+                    $addFields: {
+                        playedMoreThanThreshold: { $gt: ["$playCount", threshold] }
+                    }
+                },
+
+                // Group all results to calculate percentages
+                {
+                    $group: {
+                        _id: null,
+                        totalPlayers: { $sum: 1 },
+                        playersMoreThanThreshold: {
+                            $sum: { $cond: [{ $eq: ["$playedMoreThanThreshold", true] }, 1, 0] }
+                        }
+                    }
+                },
+
+                // Calculate the percentage
+                {
+                    $project: {
+                        _id: 0,
+                        totalPlayers: 1,
+                        playersMoreThanThreshold: 1,
+                        percentage: {
+                            $multiply: [
+                                { $divide: ["$playersMoreThanThreshold", "$totalPlayers"] },
+                                100
+                            ]
+                        }
+                    }
+                }
+            ];
+        }
+
+        // Default fallback pipeline - just return a limited number of documents
+        return [
+            { $match: {} },
+            { $limit: 20 }
+        ];
+    }
 }
 
 module.exports = new DeepSeekService();
