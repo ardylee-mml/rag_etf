@@ -76,6 +76,7 @@ function QueryInterface({ token, collections }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [queryDebugInfo, setQueryDebugInfo] = useState(null);
+  const [responseData, setResponseData] = useState(null);
 
   // Progress bar state
   const [progress, setProgress] = useState(0);
@@ -93,11 +94,14 @@ function QueryInterface({ token, collections }) {
 
       // Simulate progress updates for better UX with more detailed stages
       const progressIntervals = [
-        { progress: 20, stage: 'Analyzing query structure...', delay: 500 },
-        { progress: 30, stage: 'Identifying query patterns...', delay: 1000 },
-        { progress: 40, stage: 'Generating MongoDB pipeline...', delay: 2000 },
-        { progress: 50, stage: 'Optimizing query for performance...', delay: 3000 },
-        { progress: 60, stage: 'Executing query on database...', delay: 5000 },
+        { progress: 15, stage: 'Connecting to Deepseek LLM...', delay: 300 },
+        { progress: 20, stage: 'Analyzing query structure...', delay: 800 },
+        { progress: 25, stage: 'Translating natural language to query...', delay: 1200 },
+        { progress: 30, stage: 'Identifying query patterns...', delay: 1800 },
+        { progress: 35, stage: 'Mapping database schema...', delay: 2400 },
+        { progress: 40, stage: 'Generating MongoDB pipeline...', delay: 3000 },
+        { progress: 50, stage: 'Optimizing query for performance...', delay: 4000 },
+        { progress: 60, stage: 'Executing query on database...', delay: 6000 },
         { progress: 65, stage: 'Processing large dataset...', delay: 10000 },
         { progress: 70, stage: 'Continuing to process data...', delay: 15000 },
         { progress: 75, stage: 'Query still running (this may take a while)...', delay: 20000 },
@@ -173,27 +177,30 @@ function QueryInterface({ token, collections }) {
       setProgress(90);
       setProgressStage('Processing response...');
 
-      const response = apiResponse.data;
-      console.log('API Response received:', response);
-      console.log('Results count:', response.results ? response.results.length : 0);
+      const responseData = apiResponse.data;
+      console.log('API Response received:', responseData);
+      console.log('Results count:', responseData.results ? responseData.results.length : 0);
+
+      // Store the full response data
+      setResponseData(responseData);
 
       // Create debug info for API calls
       setQueryDebugInfo({
         originalQuery: query,
         collection: collection,
         deepseekProcessed: true,
-        processedQuery: response.processedQuery || `db.${collection}.find()`,
+        processedQuery: responseData.processedQuery || `db.${collection}.find()`,
         mongoDBQuery: {
-          pipeline: response.pipeline || [],
-          explanation: response.explanation || 'MongoDB aggregation pipeline'
+          pipeline: responseData.pipeline || [],
+          explanation: responseData.explanation || 'MongoDB aggregation pipeline'
         },
-        message: response.message,
-        tokenUsage: response.tokenUsage
+        message: responseData.message,
+        tokenUsage: responseData.tokenUsage
       });
 
       // Check if we have results and log them
-      if (response.results && response.results.length > 0) {
-        console.log('First result:', response.results[0]);
+      if (responseData.results && responseData.results.length > 0) {
+        console.log('First result:', responseData.results[0]);
       } else {
         console.log('No results returned from API');
       }
@@ -204,7 +211,7 @@ function QueryInterface({ token, collections }) {
 
       // Short delay before showing results
       setTimeout(() => {
-        setResults(response.results || []);
+        setResults(responseData.results || []);
         setLoading(false);
       }, 500);
     } catch (err) {
@@ -226,6 +233,7 @@ function QueryInterface({ token, collections }) {
       setError(errorMessage);
       setResults([]);
       setQueryDebugInfo(null);
+      setResponseData(null);
       setLoading(false);
     }
   };
@@ -411,6 +419,22 @@ function QueryInterface({ token, collections }) {
                 <div className="debug-section">
                   <h4>Deepseek Token Usage</h4>
                   <pre>{JSON.stringify(queryDebugInfo.tokenUsage, null, 2)}</pre>
+                </div>
+              )}
+
+              {/* Processing Stages */}
+              {responseData && responseData.processingStages && (
+                <div className="debug-section">
+                  <h4>Processing Stages</h4>
+                  <div className="processing-stages">
+                    {responseData.processingStages.map((stage, index) => (
+                      <div key={index} className="processing-stage-item">
+                        <span className="processing-stage-name">{stage.stage}</span>
+                        <span className={`processing-stage-status ${stage.status}`}>{stage.status}</span>
+                        <span className="processing-stage-time">{stage.time}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
