@@ -78,15 +78,35 @@ app.post('/api/query', authMiddleware, async (req, res) => {
       }, queryTimeout);
     });
 
-    // Check if this is a player frequency query
+    // Analyze the query to determine its type
     const lowerQuery = query.toLowerCase();
+
+    // Check for different query types
     const isPlayerFrequencyQuery = lowerQuery.includes('player') &&
                                   (lowerQuery.includes('played more than') || lowerQuery.includes('play more than')) &&
                                   collection === 'events';
 
+    const isZoneEngagementQuery = lowerQuery.includes('zone') &&
+                                 (lowerQuery.includes('engagement') || lowerQuery.includes('popular') ||
+                                  lowerQuery.includes('highest') || lowerQuery.includes('most')) &&
+                                 collection === 'events';
+
+    const isItemPickupQuery = lowerQuery.includes('item') &&
+                             (lowerQuery.includes('picked up') || lowerQuery.includes('collected') ||
+                              lowerQuery.includes('pick up') || lowerQuery.includes('collect')) &&
+                             collection === 'events';
+
+    // Check for the specific query about zones and items
+    const isSpecificZoneItemQuery = lowerQuery.includes('which zones have the highest player engagement') &&
+                                   lowerQuery.includes('what items were picked up in those zones');
+
+    // Combined zone and item query
+    const isZoneItemQuery = isSpecificZoneItemQuery || (isZoneEngagementQuery && isItemPickupQuery);
+
     let pipeline;
     let explanation;
 
+    // Handle different query types with specialized pipelines
     if (isPlayerFrequencyQuery) {
       console.log('Detected player frequency query, using specialized pipeline...');
 
@@ -126,7 +146,152 @@ app.post('/api/query', authMiddleware, async (req, res) => {
       ];
 
       explanation = `Specialized pipeline for player frequency query with threshold ${threshold}`;
-    } else {
+    }
+    else if (isZoneItemQuery) {
+      console.log('Detected zone engagement and item pickup query, using specialized pipeline...');
+
+      // Use a specialized pipeline for zone engagement and item pickup queries
+      pipeline = [
+        // Match only zone and item events
+        {
+          $match: {
+            $or: [
+              { type: "zone" },
+              { type: "item" }
+            ]
+          }
+        },
+
+        // Sample to improve performance
+        { $sample: { size: 100000 } },
+
+        // Group by zone to count engagement and collect items
+        {
+          $group: {
+            _id: "$context.zoneId",
+            zoneEngagement: { $sum: 1 },
+            items: {
+              $addToSet: {
+                $cond: [
+                  { $eq: ["$type", "item"] },
+                  "$context.itemId",
+                  null
+                ]
+              }
+            }
+          }
+        },
+
+        // Sort by engagement (highest first)
+        {
+          $sort: { zoneEngagement: -1 }
+        },
+
+        // Limit to top 10 zones
+        {
+          $limit: 10
+        },
+
+        // Lookup zone details
+        {
+          $lookup: {
+            from: "zones",
+            localField: "_id",
+            foreignField: "_id",
+            as: "zoneDetails"
+          }
+        },
+
+        // Lookup item details
+        {
+          $lookup: {
+            from: "items",
+            localField: "items",
+            foreignField: "_id",
+            as: "itemDetails"
+          }
+        },
+
+        // Project the final result
+        {
+          $project: {
+            _id: 0,
+            zoneId: "$_id",
+            zoneName: { $arrayElemAt: ["$zoneDetails.name", 0] },
+            engagement: "$zoneEngagement",
+            items: "$itemDetails"
+          }
+        }
+      ];
+
+      explanation = 'Specialized pipeline for zone engagement and item pickup analysis';
+    }
+    else if (isZoneEngagementQuery) {
+      console.log('Detected zone engagement query, using specialized pipeline...');
+
+      // Use a specialized pipeline for zone engagement queries
+      pipeline = [
+        // Match only zone events
+        {
+          $match: {
+            type: "zone"
+          }
+        },
+
+        // Sample to improve performance
+        { $sample: { size: 100000 } },
+
+        // Group by zone to count engagement
+        {
+          $group: {
+            _id: "$context.zoneId",
+            zoneEngagement: { $sum: 1 },
+            uniquePlayers: { $addToSet: "$playerId" }
+          }
+        },
+
+        // Add field for unique player count
+        {
+          $addFields: {
+            uniquePlayerCount: { $size: "$uniquePlayers" }
+          }
+        },
+
+        // Sort by engagement (highest first)
+        {
+          $sort: { zoneEngagement: -1 }
+        },
+
+        // Limit to top 10 zones
+        {
+          $limit: 10
+        },
+
+        // Lookup zone details
+        {
+          $lookup: {
+            from: "zones",
+            localField: "_id",
+            foreignField: "_id",
+            as: "zoneDetails"
+          }
+        },
+
+        // Project the final result
+        {
+          $project: {
+            _id: 0,
+            zoneId: "$_id",
+            zoneName: { $arrayElemAt: ["$zoneDetails.name", 0] },
+            engagement: "$zoneEngagement",
+            uniquePlayers: "$uniquePlayerCount"
+          }
+        }
+      ];
+
+      explanation = 'Specialized pipeline for zone engagement analysis';
+    }
+    else {
       // Use extractMongoDBPipeline for other queries
       console.log('Generating MongoDB pipeline...');
       pipeline = deepseekService.extractMongoDBPipeline('[]', query, collection);
