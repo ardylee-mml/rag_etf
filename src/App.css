@@ -82,9 +82,13 @@
 
 .subtitle {
   font-size: 1.1rem;
-  color: #6b7280;
   max-width: 800px;
   margin: 0 auto;
+}
+
+.warning-text {
+  color: #dc2626;
+  font-weight: 700;
 }
 
 /* Error message */

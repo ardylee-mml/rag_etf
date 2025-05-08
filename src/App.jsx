@@ -75,7 +75,7 @@ function App() {
           </div>
           <div className="title-container">
             <h1 className="title">Escape To Freedom - Game Analytics</h1>
-            <p className="subtitle">Explore player journeys, game interactions, and learning outcomes</p>
+            <p className="subtitle warning-text">This RAG application is strictly for internal evaluation and development purpose</p>
           </div>
         </div>
       </header>
