@@ -69,8 +69,15 @@ function App() {
   return (
     <div className="container">
       <header className="header">
-        <h1 className="title">Escape To Freedom - Game Analytics</h1>
-        <p className="subtitle">Explore player journeys, game interactions, and learning outcomes</p>
+        <div className="header-content">
+          <div className="logo-container">
+            <img src="/images/metaminding-logo.svg" alt="MetaMinding Lab Logo" className="logo" />
+          </div>
+          <div className="title-container">
+            <h1 className="title">Escape To Freedom - Game Analytics</h1>
+            <p className="subtitle">Explore player journeys, game interactions, and learning outcomes</p>
+          </div>
+        </div>
       </header>
 
       {error && <div className="error">{error}</div>}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <g>
+    <path d="M295 60 C 280 80, 250 120, 180 120 C 110 120, 80 80, 65 60 C 50 40, 20 0, 130 0 C 240 0, 310 40, 295 60 Z" fill="none" stroke="black" stroke-width="20"/>
+    <path d="M305 60 C 320 80, 350 120, 420 120 C 490 120, 520 80, 535 60 C 550 40, 580 0, 470 0 C 360 0, 290 40, 305 60 Z" fill="none" stroke="black" stroke-width="20"/>
+    <path d="M295 60 C 280 40, 250 0, 320 0 C 390 0, 320 40, 305 60 Z" fill="none" stroke="#00FFFF" stroke-width="20"/>
+    <text x="0" y="280" font-family="Arial" font-size="80" font-weight="bold">MetaMinding</text>
+    <text x="570" y="190" font-family="Arial" font-size="40" fill="#00FFFF">LAB</text>
+  </g>
+</svg>
