@@ -71,7 +71,7 @@ function App() {
       <header className="header">
         <div className="header-content">
           <div className="logo-container">
-            <img src="/images/metaminding-logo.svg" alt="MetaMinding Lab Logo" className="logo" />
+            <img src="/images/metaminding-glasses-logo.svg" alt="MetaMinding Logo" className="logo" />
           </div>
           <div className="title-container">
             <h1 className="title">Escape To Freedom - Game Analytics</h1>

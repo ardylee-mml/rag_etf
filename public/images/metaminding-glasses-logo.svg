@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100" preserveAspectRatio="xMidYMid meet">
+  <g>
+    <!-- Glasses frame -->
+    <path d="M30,50 C25,50 20,55 10,55 C5,55 0,50 0,45 C0,40 5,30 30,30 C55,30 60,40 60,45 C60,50 55,55 50,55 C40,55 35,50 30,50 Z" fill="none" stroke="black" stroke-width="3"/>
+    <path d="M120,50 C125,50 130,55 140,55 C145,55 150,50 150,45 C150,40 145,30 120,30 C95,30 90,40 90,45 C90,50 95,55 100,55 C110,55 115,50 120,50 Z" fill="none" stroke="black" stroke-width="3"/>
+
+    <!-- Bridge of glasses -->
+    <path d="M60,45 C65,40 85,40 90,45" fill="none" stroke="black" stroke-width="3"/>
+
+    <!-- Cyan accent -->
+    <path d="M75,35 C70,30 80,30 75,35" fill="none" stroke="#00FFFF" stroke-width="3"/>
+
+    <!-- MetaMinding text -->
+    <text x="10" y="85" font-family="Arial" font-size="14" font-weight="bold">MetaMinding</text>
+  </g>
+</svg>
