@@ -76,17 +76,21 @@ function QueryInterface({ token, collections }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [queryDebugInfo, setQueryDebugInfo] = useState(null);
-  
+
   // Progress bar state
   const [progress, setProgress] = useState(0);
   const [progressStage, setProgressStage] = useState('');
-  
+
+  // Minimizable sections state
+  const [fieldsMinimized, setFieldsMinimized] = useState(false);
+  const [eventTypesMinimized, setEventTypesMinimized] = useState(false);
+
   // Reset progress when loading state changes
   useEffect(() => {
     if (loading) {
       setProgress(10);
       setProgressStage('Initializing query...');
-      
+
       // Simulate progress updates for better UX
       const progressIntervals = [
         { progress: 25, stage: 'Analyzing query...', delay: 500 },
@@ -94,7 +98,7 @@ function QueryInterface({ token, collections }) {
         { progress: 60, stage: 'Executing query...', delay: 1500 },
         { progress: 80, stage: 'Processing results...', delay: 2000 }
       ];
-      
+
       // Set up the progress intervals
       const timers = progressIntervals.map(({ progress, stage, delay }) => {
         return setTimeout(() => {
@@ -102,7 +106,7 @@ function QueryInterface({ token, collections }) {
           setProgressStage(stage);
         }, delay);
       });
-      
+
       // Clean up timers
       return () => {
         timers.forEach(timer => clearTimeout(timer));
@@ -132,7 +136,7 @@ function QueryInterface({ token, collections }) {
       // Use the real API endpoint on port 3000
       const apiUrl = '/api/query';
       console.log('Sending request to:', apiUrl);
-      
+
       // Update progress
       setProgress(30);
       setProgressStage('Sending query to server...');
@@ -159,11 +163,11 @@ function QueryInterface({ token, collections }) {
           'Authorization': `Bearer ${token || 'dummy-token'}`
         }
       });
-      
+
       // Update progress
       setProgress(90);
       setProgressStage('Processing response...');
-      
+
       const response = apiResponse.data;
       console.log('API Response received:', response);
       console.log('Results count:', response.results ? response.results.length : 0);
@@ -192,7 +196,7 @@ function QueryInterface({ token, collections }) {
       // Complete progress
       setProgress(100);
       setProgressStage('Query completed successfully!');
-      
+
       // Short delay before showing results
       setTimeout(() => {
         setResults(response.results || []);
@@ -272,13 +276,13 @@ function QueryInterface({ token, collections }) {
             {loading ? 'Processing...' : 'Submit Query'}
           </button>
         </form>
-        
+
         {/* Progress Bar */}
         {loading && (
           <div className="progress-container">
             <div className="progress-bar-wrapper">
-              <div 
-                className="progress-bar" 
+              <div
+                className="progress-bar"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -291,32 +295,52 @@ function QueryInterface({ token, collections }) {
         {!loading && (
           <div className="collection-info">
             <div className="fields-container">
-              <h3 className="fields-title">Available Fields for {collection}:</h3>
-              <div className="fields-list">
-                {COLLECTION_FIELDS[collection] ? (
-                  COLLECTION_FIELDS[collection].map((field, index) => (
-                    <div key={index} className="field-item" onClick={() => handleFieldClick(field.name)}>
-                      <span className="field-name">{field.name}</span>
-                      <span className="field-description">{field.description}</span>
-                    </div>
-                  ))
-                ) : (
-                  <p>No field information available for this collection.</p>
-                )}
+              <div
+                className="section-header"
+                onClick={() => setFieldsMinimized(!fieldsMinimized)}
+              >
+                <h3 className="fields-title">Available Fields for {collection}:</h3>
+                <span className={`toggle-icon ${fieldsMinimized ? 'icon-down' : 'icon-up'}`}>
+                  {fieldsMinimized ? '▼' : '▲'}
+                </span>
               </div>
+              {!fieldsMinimized && (
+                <div className="fields-list">
+                  {COLLECTION_FIELDS[collection] ? (
+                    COLLECTION_FIELDS[collection].map((field, index) => (
+                      <div key={index} className="field-item" onClick={() => handleFieldClick(field.name)}>
+                        <span className="field-name">{field.name}</span>
+                        <span className="field-description">{field.description}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No field information available for this collection.</p>
+                  )}
+                </div>
+              )}
             </div>
 
             {collection === 'events' && (
               <div className="event-types-container">
-                <h3 className="event-types-title">Event Types:</h3>
-                <div className="event-types-list">
-                  {EVENT_TYPES.map((eventType, index) => (
-                    <div key={index} className="event-type-item" onClick={() => handleEventTypeClick(eventType.type)}>
-                      <span className="event-type-name">{eventType.type}</span>
-                      <span className="event-type-description">{eventType.description}</span>
-                    </div>
-                  ))}
+                <div
+                  className="section-header"
+                  onClick={() => setEventTypesMinimized(!eventTypesMinimized)}
+                >
+                  <h3 className="event-types-title">Event Types:</h3>
+                  <span className={`toggle-icon ${eventTypesMinimized ? 'icon-down' : 'icon-up'}`}>
+                    {eventTypesMinimized ? '▼' : '▲'}
+                  </span>
                 </div>
+                {!eventTypesMinimized && (
+                  <div className="event-types-list">
+                    {EVENT_TYPES.map((eventType, index) => (
+                      <div key={index} className="event-type-item" onClick={() => handleEventTypeClick(eventType.type)}>
+                        <span className="event-type-name">{eventType.type}</span>
+                        <span className="event-type-description">{eventType.description}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
