@@ -152,6 +152,9 @@ app.post('/api/query', authMiddleware, async (req, res) => {
 
       // Use a specialized pipeline for zone engagement and item pickup queries
       pipeline = [
+        // Sample first to reduce data volume
+        { $sample: { size: 50000 } },
+
         // Match only zone and item events
         {
           $match: {
@@ -162,8 +165,14 @@ app.post('/api/query', authMiddleware, async (req, res) => {
           }
         },
 
-        // Sample to improve performance
-        { $sample: { size: 100000 } },
+        // Project only the fields we need to reduce memory usage
+        {
+          $project: {
+            type: 1,
+            "context.zoneId": 1,
+            "context.itemId": { $cond: [{ $eq: ["$type", "item"] }, "$context.itemId", null] }
+          }
+        },
 
         // Group by zone to count engagement and collect items
         {
@@ -171,12 +180,19 @@ app.post('/api/query', authMiddleware, async (req, res) => {
             _id: "$context.zoneId",
             zoneEngagement: { $sum: 1 },
             items: {
-              $addToSet: {
-                $cond: [
-                  { $eq: ["$type", "item"] },
-                  "$context.itemId",
-                  null
-                ]
+              $addToSet: "$context.itemId"
+            }
+          }
+        },
+
+        // Filter out null items
+        {
+          $addFields: {
+            items: {
+              $filter: {
+                input: "$items",
+                as: "item",
+                cond: { $ne: ["$$item", null] }
               }
             }
           }
@@ -187,9 +203,9 @@ app.post('/api/query', authMiddleware, async (req, res) => {
           $sort: { zoneEngagement: -1 }
         },
 
-        // Limit to top 10 zones
+        // Limit to top 5 zones to reduce memory usage
         {
-          $limit: 10
+          $limit: 5
         },
 
         // Lookup zone details
@@ -219,7 +235,17 @@ app.post('/api/query', authMiddleware, async (req, res) => {
             zoneId: "$_id",
             zoneName: { $arrayElemAt: ["$zoneDetails.name", 0] },
             engagement: "$zoneEngagement",
-            items: "$itemDetails"
+            itemCount: { $size: "$itemDetails" },
+            items: {
+              $map: {
+                input: "$itemDetails",
+                as: "item",
+                in: {
+                  itemId: "$$item._id",
+                  name: "$$item.name"
+                }
+              }
+            }
           }
         }
       ];
@@ -231,6 +257,9 @@ app.post('/api/query', authMiddleware, async (req, res) => {
 
       // Use a specialized pipeline for zone engagement queries
       pipeline = [
+        // Sample first to reduce data volume
+        { $sample: { size: 50000 } },
+
         // Match only zone events
         {
           $match: {
@@ -238,8 +267,13 @@ app.post('/api/query', authMiddleware, async (req, res) => {
           }
         },
 
-        // Sample to improve performance
-        { $sample: { size: 100000 } },
+        // Project only the fields we need to reduce memory usage
+        {
+          $project: {
+            "context.zoneId": 1,
+            playerId: 1
+          }
+        },
 
         // Group by zone to count engagement
         {
@@ -257,14 +291,23 @@ app.post('/api/query', authMiddleware, async (req, res) => {
           }
         },
 
+        // Remove the large uniquePlayers array to save memory
+        {
+          $project: {
+            _id: 1,
+            zoneEngagement: 1,
+            uniquePlayerCount: 1
+          }
+        },
+
         // Sort by engagement (highest first)
         {
           $sort: { zoneEngagement: -1 }
         },
 
-        // Limit to top 10 zones
+        // Limit to top 5 zones to reduce memory usage
         {
-          $limit: 10
+          $limit: 5
         },
 
         // Lookup zone details
@@ -316,10 +359,14 @@ app.post('/api/query', authMiddleware, async (req, res) => {
     console.log('Executing pipeline:', JSON.stringify(pipeline));
 
     // Create a promise for the query execution
-    const queryPromise = mongoCollection.aggregate(pipeline, {
+    // Ensure we're using allowDiskUse for all aggregations, especially those with sorts
+    const aggregateOptions = {
       allowDiskUse: true,  // Allow disk usage for large operations
       maxTimeMS: 25000     // Set a 25-second timeout at the MongoDB level
-    }).toArray();
+    };
+
+    console.log('Executing with options:', JSON.stringify(aggregateOptions));
+    const queryPromise = mongoCollection.aggregate(pipeline, aggregateOptions).toArray();
 
     // Race the query promise against the timeout
     const results = await Promise.race([queryPromise, timeoutPromise]);
